@@ -2,28 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'Receipt';
-  src: url('/fonts/Receipt.otf') format('opentype');
-}
+@layer base {
+  @font-face {
+    font-family: 'Receipt';
+    src: url('/fonts/Receipt.otf') format('opentype');
+    font-display: swap;
+  }
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --foreground-rgb: 255, 255, 255;
+      --background-start-rgb: 0, 0, 0;
+      --background-end-rgb: 0, 0, 0;
+    }
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
   }
 }
 
-body {
-  margin: 0;
-  padding: 0;
+@layer components {
+  /* Add component styles here */
 }
 
-/* Add any other global styles here */ 
+@layer utilities {
+  /* Add utility styles here */
+} 
