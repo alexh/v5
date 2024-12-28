@@ -14,15 +14,16 @@ export default function Toast({ message, isVisible, color }: ToastProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
-          className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50"
+          className="fixed bottom-4 left-0 right-0 flex justify-center md:bottom-8 z-50"
           style={{ fontFamily: "receipt-narrow, sans-serif" }}
         >
           <div 
-            className="px-4 py-2 rounded"
+            className="px-4 py-2 rounded mx-4 md:mx-8"
             style={{ 
               color,
               textShadow: `0 0 5px ${color}40`,
-              border: `1px solid ${color}50`
+              border: `1px solid ${color}50`,
+              whiteSpace: 'nowrap'
             }}
           >
             {message}
