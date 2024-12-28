@@ -84,7 +84,7 @@ const SmokeyBackground = () => {
     }
 
     const initParticles = () => {
-      particlesRef.current = Array.from({ length: 150 }, createParticle)
+      particlesRef.current = Array.from({ length: 500 }, createParticle)
     }
 
     initParticles()
@@ -154,21 +154,23 @@ const SmokeyBackground = () => {
         )
         
         // Brighter core with smoother gradient
-        gradient.addColorStop(0, hexToRgba(currentTheme.secondary, particle.opacity * 2))
-        gradient.addColorStop(0.3, hexToRgba(currentTheme.secondary, particle.opacity))
+        gradient.addColorStop(0, hexToRgba(currentTheme.secondary, particle.opacity * 1.8))
+        gradient.addColorStop(0.3, hexToRgba(currentTheme.secondary, particle.opacity * 0.9))
         gradient.addColorStop(1, hexToRgba(currentTheme.secondary, 0))
 
         ctx.beginPath()
         ctx.fillStyle = gradient
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+        ctx.globalAlpha = 0.9
         ctx.fill()
+        ctx.globalAlpha = 1
 
         // Brighter center point
         const centerGlow = ctx.createRadialGradient(
           particle.x, particle.y, 0,
           particle.x, particle.y, innerSize
         )
-        centerGlow.addColorStop(0, hexToRgba(currentTheme.secondary, particle.opacity * 2.5))
+        centerGlow.addColorStop(0, hexToRgba(currentTheme.secondary, particle.opacity * 2.25))
         centerGlow.addColorStop(1, hexToRgba(currentTheme.secondary, 0))
 
         ctx.beginPath()
