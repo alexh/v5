@@ -15,7 +15,7 @@ export default function Home() {
       <SmokeyBackground />
       <div className="max-w-3xl mx-auto relative z-10">
         <div className="relative z-20">
-          <h1 className="text-8xl font-extrabold italic text-center mb-[-40px] pl-3 font-forma text-theme-text">
+          <h1 className="text-8xl font-extrabold italic text-center mb-1 pl-3 font-forma text-theme-text">
             Alex Haynes
           </h1>
           
@@ -24,19 +24,19 @@ export default function Home() {
           </h2>
 
           <div className="flex justify-center items-center gap-4 mb-12">
-            <a href="/Alex_Haynes.pdf" className="hover:scale-105 transition-transform pointer-events-auto">
+            <a href="/Alex_Haynes.pdf" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt text-xl px-4 py-2 rounded-lg">Resume</button>
             </a>
-            <a href="https://www.linkedin.com/in/alexhaynes32" className="hover:scale-105 transition-transform pointer-events-auto">
+            <a href="https://www.linkedin.com/in/alexhaynes32" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt text-xl px-4 py-2 rounded-lg">LinkedIn</button>
             </a>
-            <a href="https://www.github.com/alexh" className="hover:scale-105 transition-transform pointer-events-auto">
+            <a href="https://www.github.com/alexh" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt text-xl px-4 py-2 rounded-lg">GitHub</button>
             </a>
-            <a href="mailto:alex@alexhaynes.org" className="hover:scale-105 transition-transform pointer-events-auto">
+            <a href="mailto:alex@alexhaynes.org" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt text-xl px-4 py-2 rounded-lg">Email Me</button>
             </a>
-            <a href="/oracle" className="hover:scale-105 transition-transform pointer-events-auto">
+            <a href="/oracle" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt text-xl px-4 py-2 rounded-lg">Oracle</button>
             </a>
           </div>
@@ -58,10 +58,10 @@ export default function Home() {
               Beyond the world of coding, I make full use of my down time, whether it's skiing; exploring new places; 
               spending time with my dog, <a 
                 href="https://www.instagram.com/bolognaboynyc"
-                className="underline hover:text-theme-secondary transition-colors pointer-events-auto"
+                className="underline hover:text-theme-secondary transition-colors pointer-events-auto cursor-pointer"
               >Bologna</a>; or building and designing for my clothing brand, <a 
                 href="https://utility.materials.nyc"
-                className="underline hover:text-theme-secondary transition-colors pointer-events-auto"
+                className="underline hover:text-theme-secondary transition-colors pointer-events-auto cursor-pointer"
               >Utility Materials, Inc.</a>, my clothing brand. Additionally, I'm developing a rogue-like 
               platform fighting game.
             </p>

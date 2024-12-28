@@ -1,4 +1,4 @@
-import metadata from '../output/metadata.json'
+import metadata from '../public/midjourney/metadata.json'
 
 export interface MidjourneyJob {
   id: string

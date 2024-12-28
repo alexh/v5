@@ -131,7 +131,7 @@ export default function HologramImage({
     const tempCanvas = document.createElement('canvas')
     tempCanvas.width = imageWidth
     tempCanvas.height = imageHeight
-    const tempCtx = tempCanvas.getContext('2d')
+    const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true })
     if (!tempCtx) return []
 
     const sampleRate = 5
@@ -439,7 +439,7 @@ export default function HologramImage({
           const tempCanvas = document.createElement('canvas')
           tempCanvas.width = imageWidth
           tempCanvas.height = imageHeight
-          const tempCtx = tempCanvas.getContext('2d')
+          const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true })
           if (!tempCtx) return
 
           tempCtx.drawImage(img, 0, 0, imageWidth, imageHeight)
@@ -603,8 +603,8 @@ export default function HologramImage({
 
   const extractAverageColor = (img: HTMLImageElement) => {
     const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return '#FF671F' // fallback to orange
+    const ctx = canvas.getContext('2d', { willReadFrequently: true })
+    if (!ctx) return '#FF671F'
     
     // Scale down for performance
     canvas.width = 50
@@ -650,7 +650,7 @@ export default function HologramImage({
     const container = containerRef.current
     if (container && e.target instanceof HTMLImageElement) {
       const canvas = canvasRef.current
-      const ctx = canvas?.getContext('2d')
+      const ctx = canvas?.getContext('2d', { willReadFrequently: true })
       if (ctx && canvas && container) {
         canvas.width = window.innerWidth
         canvas.height = window.innerHeight
@@ -668,10 +668,19 @@ export default function HologramImage({
     }
   }
 
+  useEffect(() => {
+    // Disable dragging on all images
+    const images = document.querySelectorAll('img')
+    images.forEach(img => {
+      img.draggable = false
+    })
+  }, [])
+
   return (
     <div 
       ref={containerRef}
       className="relative w-full bg-black"
+      onContextMenu={(e) => e.preventDefault()}
     >
       <div className="relative w-full">
         {/* Hidden preload image */}
@@ -681,11 +690,16 @@ export default function HologramImage({
           ref={imageRef}
           className="w-full h-auto opacity-0"
           onLoad={handleImageLoad}
+          onContextMenu={(e) => e.preventDefault()}
+          draggable={false}
         />
 
         {/* Base image layer with max height constraint */}
         {imageLoaded && (
-          <div className="absolute inset-0 flex items-start justify-center pt-[5vh]">
+          <div 
+            className="absolute inset-0 flex items-start justify-center pt-[5vh]"
+            onContextMenu={(e) => e.preventDefault()}
+          >
             <img
               src={src}
               alt={alt}
@@ -695,6 +709,8 @@ export default function HologramImage({
               style={{ 
                 filter: 'none'
               }}
+              onContextMenu={(e) => e.preventDefault()}
+              draggable={false}
             />
           </div>
         )}

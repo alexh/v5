@@ -20,7 +20,6 @@ export default function OracleButton({
   }, [color])
 
   const buttonClasses = `
-    font-mono text-lg
     transition-all duration-200
     hover:scale-105
     relative
@@ -44,7 +43,9 @@ export default function OracleButton({
       className={buttonClasses} 
       style={{ 
         color: color || 'inherit',
-        textShadow: `0 0 5px ${color}40`
+        textShadow: `0 0 5px ${color}40`,
+        fontFamily: "receipt-narrow, sans-serif",
+        fontSize: "1.25rem"
       }}
     >
       {children}

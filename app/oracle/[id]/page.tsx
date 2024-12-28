@@ -1,41 +1,47 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useTheme } from '../../contexts/ThemeContext'
-import { MidjourneyJob } from '../../lib/midjourney'
-import HologramImage from '../../components/HologramImage'
-import OracleButton from '../../components/OracleButton'
-import Toast from '../../components/Toast'
+import { useTheme } from '../../../contexts/ThemeContext'
+import { MidjourneyJob } from '../../../lib/midjourney'
+import HologramImage from '../../../components/HologramImage'
+import OracleButton from '../../../components/OracleButton'
+import Toast from '../../../components/Toast'
 
-export default function Oracle() {
+export default function OracleVision({ 
+  params 
+}: { 
+  params: { id: string } 
+}) {
   const [job, setJob] = useState<MidjourneyJob | null>(null)
   const [themeColor, setThemeColor] = useState('#FF671F')
-  const { currentTheme } = useTheme()
   const [showToast, setShowToast] = useState(false)
   
+  const loadJob = async (id: string) => {
+    try {
+      setJob(null)
+      const response = await fetch(`/api/job/${id}`)
+      const data = await response.json()
+      setJob(data)
+    } catch (error) {
+      console.error('Error loading job:', error)
+    }
+  }
+
   const loadRandomJob = async () => {
     try {
       setJob(null)
       const response = await fetch('/api/random-job')
       const data = await response.json()
+      window.history.pushState({}, '', `/oracle/${data.id}`)
       setJob(data)
     } catch (error) {
       console.error('Error in loadRandomJob:', error)
     }
   }
 
-  const handleColorExtracted = (color: string) => {
-    console.log('Color extracted:', color)
-    setThemeColor(color)
-  }
-
   useEffect(() => {
-    console.log('Theme color changed to:', themeColor)
-  }, [themeColor])
-
-  useEffect(() => {
-    loadRandomJob()
-  }, [])
+    loadJob(params.id)
+  }, [params.id])
 
   const shareVision = async () => {
     if (!job) return
@@ -45,7 +51,7 @@ export default function Oracle() {
         `${window.location.origin}/oracle/${job.id}`
       )
       setShowToast(true)
-      setTimeout(() => setShowToast(false), 2000) // Hide after 2 seconds
+      setTimeout(() => setShowToast(false), 2000)
     } catch (err) {
       console.error('Failed to copy share link:', err)
     }
