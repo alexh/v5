@@ -9,7 +9,5 @@
   NEXT_USE_NETLIFY_EDGE = "true"
   NODE_VERSION = "18"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200 
+[build.processing]
+  skip_processing = true 

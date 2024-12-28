@@ -12,12 +12,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  if (typeof window !== 'undefined') {
+    console.log('Styles loaded:', document.styleSheets.length)
+  }
+  
   return (
-    <html lang="en" className="bg-theme-primary">
-      <head>
-        <link rel="stylesheet" href="https://use.typekit.net/qzy8qpi.css" />
-      </head>
-      <body className="min-h-screen text-theme-text bg-theme-primary">
+    <html lang="en">
+      <body>
         <ThemeProvider>
           {children}
         </ThemeProvider>

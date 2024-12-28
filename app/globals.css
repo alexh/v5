@@ -2,20 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Your custom global styles */
 :root {
-  --theme-primary: #ffffff;
-  --theme-text: #000000;
+  --foreground-rgb: 255, 255, 255;
+  --background-rgb: 0, 0, 0;
 }
 
-[data-theme='dark'] {
-  --theme-primary: #000000;
-  --theme-text: #ffffff;
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
 }
 
-@layer base {
-  body {
-    @apply min-h-screen;
-    background-color: var(--theme-primary);
-    color: var(--theme-text);
-  }
-} 
+/* Add any other global styles you need */ 
