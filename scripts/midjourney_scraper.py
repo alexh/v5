@@ -105,11 +105,17 @@ class MidjourneyImageScraper:
                 print(f"Error finding image: {e}")
                 return None
             
-            # Get prompt from the p tag
+            # Get prompt - UPDATED SECTION
             try:
-                prompt_element = self.driver.find_element(By.CSS_SELECTOR, 'div.group\\/promptText p')
-                prompt = prompt_element.text.strip()
-                print(f"Found prompt: {prompt}")
+                # Try to find all prompt elements
+                prompt_elements = self.driver.find_elements(By.CSS_SELECTOR, 'div.group\\/promptText p')
+                if prompt_elements:
+                    # Take only the first prompt element to avoid duplicates
+                    prompt = prompt_elements[0].text.strip()
+                    print(f"Found prompt: {prompt}")
+                else:
+                    print("No prompt found")
+                    return None
             except Exception as e:
                 print(f"Error finding prompt: {e}")
                 return None
@@ -235,12 +241,27 @@ class MidjourneyImageScraper:
                 for link in job_links[-5:]:
                     print(link)
 
-            # Process each link
+            # Filter out jobs we've already processed
+            new_job_links = []
             for job_url in job_links:
                 job_id = job_url.split('/')[-1]
-                if job_id in self.metadata:
+                image_path = os.path.join(self.images_dir, f"{job_id}.png")
+                
+                if job_id in self.metadata and os.path.exists(image_path):
+                    print(f"Skipping already processed job: {job_id}")
                     continue
-
+                    
+                new_job_links.append(job_url)
+            
+            print(f"\nFound {len(job_links)} total jobs")
+            print(f"Found {len(new_job_links)} new jobs to process")
+            
+            # Track seen prompts to avoid duplicates
+            seen_prompts = set()
+            
+            # Process each new link
+            for job_url in new_job_links:
+                job_id = job_url.split('/')[-1]
                 print(f"\nProcessing {job_url}")
                 job_data = self.fetch_job_data(job_url)
                 if not job_data:

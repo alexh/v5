@@ -10,6 +10,10 @@
   }
 
   :root {
+    --theme-primary: #ffffff;
+    --theme-secondary: #FF671F;
+    --theme-text: #000000;
+    
     --foreground-rgb: 0, 0, 0;
     --background-start-rgb: 214, 219, 220;
     --background-end-rgb: 255, 255, 255;
@@ -34,5 +38,9 @@
 }
 
 @layer utilities {
-  /* Add utility styles here */
+  .font-receipt-narrow {
+    font-family: "receipt-narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
 } 

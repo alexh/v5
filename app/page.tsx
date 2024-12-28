@@ -10,7 +10,7 @@ export default function Home() {
   const { currentTheme } = useTheme()
 
   return (
-    <main className="min-h-screen p-[5%] font-receipt text-theme-text bg-theme-primary relative">
+    <main className="min-h-screen p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative">
       <MatrixRain />
       <SmokeyBackground />
       <div className="max-w-3xl mx-auto relative z-10">
@@ -25,23 +25,20 @@ export default function Home() {
 
           <div className="flex justify-center items-center gap-4 mb-12">
             <a href="/oracle" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
-              <button className="font-receipt text-xl px-4 py-2 rounded-lg">Oracle</button>
+              <button className="font-receipt-narrow text-xl px-4 py-2 rounded-lg">Oracle</button>
             </a>
-            {/* <a href="/Alex_Haynes.pdf" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
-              <button className="font-receipt text-xl px-4 py-2 rounded-lg">Resume</button>
-            </a> */}
             <a href="https://www.linkedin.com/in/alexhaynes32" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
-              <button className="font-receipt text-xl px-4 py-2 rounded-lg">LinkedIn</button>
+              <button className="font-receipt-narrow text-xl px-4 py-2 rounded-lg">LinkedIn</button>
             </a>
             <a href="https://www.github.com/alexh" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
-              <button className="font-receipt text-xl px-4 py-2 rounded-lg">GitHub</button>
+              <button className="font-receipt-narrow text-xl px-4 py-2 rounded-lg">GitHub</button>
             </a>
             <a href="mailto:alex@alexhaynes.org" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
-              <button className="font-receipt text-xl px-4 py-2 rounded-lg">Email Me</button>
+              <button className="font-receipt-narrow text-xl px-4 py-2 rounded-lg">Email Me</button>
             </a>
           </div>
 
-          <div className="space-y-12 text-xl text-theme-text text-content relative">
+          <div className="space-y-12 text-xl text-theme-text text-content relative font-receipt-narrow">
             <p>
               I am a software engineer living in New York City, USA.
             </p>
@@ -67,7 +64,7 @@ export default function Home() {
             </p>
           </div>
 
-          <footer className="text-center mt-12 text-theme-text">
+          <footer className="text-center mt-12 text-theme-text font-receipt-narrow">
             © {new Date().getFullYear()}, Built with love ❤️
           </footer>
         </div>
