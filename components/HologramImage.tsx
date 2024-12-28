@@ -252,7 +252,7 @@ export default function HologramImage({
             if (mounted) {
               setShowOriginal(true)
               // Start melting effect immediately when image starts to fade in
-              canStartMeltingRef.current = true // Start melting immediately
+            //   canStartMeltingRef.current = true // Start melting immediately
             }
           }, 3000)
         }
@@ -700,18 +700,20 @@ export default function HologramImage({
             className="absolute inset-0 flex items-start justify-center pt-[5vh]"
             onContextMenu={(e) => e.preventDefault()}
           >
-            <img
-              src={src}
-              alt={alt}
-              className={`w-full h-auto max-h-[60vh] object-contain transition-opacity duration-[3000ms] mix-blend-lighten ${
-                showOriginal ? 'opacity-70' : 'opacity-0'
-              }`}
-              style={{ 
-                filter: 'none'
-              }}
-              onContextMenu={(e) => e.preventDefault()}
-              draggable={false}
-            />
+            <div className="relative w-full max-h-[60vh]">
+              <img
+                src={src}
+                alt={alt}
+                className={`w-full h-auto max-h-[60vh] object-contain transition-opacity duration-[3000ms] mix-blend-lighten ${
+                  showOriginal ? 'opacity-70' : 'opacity-0'
+                }`}
+                style={{ 
+                  filter: 'blur(0.5px)'
+                }}
+                onContextMenu={(e) => e.preventDefault()}
+                draggable={false}
+              />
+            </div>
           </div>
         )}
         
@@ -726,14 +728,14 @@ export default function HologramImage({
         />
 
         {/* Melting particles canvas - separate layer */}
-        <canvas
+        {/* <canvas
           ref={meltingCanvasRef}
           className="fixed top-0 left-0 w-screen h-screen pointer-events-none"
           style={{ 
             zIndex: 2,
             mixBlendMode: 'screen'
           }}
-        />
+        /> */}
         
         {/* Subtle ethereal glow */}
         <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-black opacity-10 pointer-events-none mix-blend-overlay" />
