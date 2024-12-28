@@ -7,11 +7,6 @@
   src: url('/fonts/Receipt.otf') format('opentype');
 }
 
-@font-face {
-  font-family: 'Forma';
-  src: url('/fonts/FormaDJRBanner-Regular.woff2') format('woff2');
-}
-
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

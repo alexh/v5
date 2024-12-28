@@ -53,7 +53,7 @@ export default function Oracle() {
   }
 
   return (
-    <main className="h-screen bg-transparent overflow-hidden flex flex-col"
+    <main className="h-screen bg-black overflow-hidden flex flex-col"
           style={{ color: themeColor }}>
       <div className="fixed top-4 left-4 md:top-8 md:left-8 z-10" style={{ fontFamily: "receipt-narrow, sans-serif" }}>
         <OracleButton 

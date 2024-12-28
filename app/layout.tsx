@@ -1,6 +1,6 @@
-import './globals.css'
+import type { Metadata } from 'next'
 import { ThemeProvider } from '../contexts/ThemeContext'
-import { Metadata } from 'next'
+import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Alex Haynes',
@@ -14,6 +14,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="stylesheet" href="https://use.typekit.net/qzy8qpi.css" />
+      </head>
       <body>
         <ThemeProvider>
           {children}
