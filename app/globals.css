@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --theme-primary: #FF671F;
+    --theme-secondary: #E55D1C;
+    --theme-text: #FFFFFF;
+    --theme-background: #FF671F;
+  }
+}
+
+html, 
+body {
+  background-color: black !important;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--theme-text);
+  text-decoration: none;
+  cursor: pointer !important;
+}
+
+/* Cool button styles */
+button {
+  --c: var(--theme-text);
+  background: linear-gradient(90deg, #0000 33%, #fff5, #0000 67%) var(--_p,100%)/300% no-repeat;
+  color: #0000;
+  border: none;
+  transform: perspective(900px) rotateY(calc(10deg*var(--_i,-1)));
+  text-shadow: 
+    calc(var(--_i,-1)* 0.08em) -.01em 0   var(--c),
+    calc(var(--_i,-1)*-0.08em)  .01em 2px #0004;
+  outline-offset: .1em;
+  transition: 0.3s;
+  cursor: pointer !important;
+  padding: .1em .3em;
+  text-wrap: nowrap;
+  background-color: var(--theme-secondary);
+}
+
+button:hover,
+button:focus-visible {
+  --_p: 0%;
+  --_i: 1;
+}
+
+button:active {
+  text-shadow: none;
+  color: var(--c);
+  box-shadow: inset 0 0 9e9q #0005;
+  transition: 0s;
+}
+
+/* Ensure all interactive elements show pointer cursor */
+a, button, select, 
+[role="button"],
+.clickable {
+  cursor: pointer !important;
+}
+
+/* Ensure pointer events work */
+.pointer-events-auto {
+  pointer-events: auto !important;
+}
+
+@keyframes scan {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+.animate-scan {
+  animation: scan 4s linear infinite;
+} 
