@@ -21,6 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="stylesheet" href="https://use.typekit.net/qzy8qpi.css" />
+      </head>
       <body className={inter.className}>
         <ThemeProvider>
           {children}
