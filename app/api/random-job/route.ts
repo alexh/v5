@@ -3,9 +3,7 @@ import { getRandomJob } from '../../../lib/midjourney'
 
 export async function GET() {
   try {
-    console.log('API route called')
     const randomJob = getRandomJob()
-    console.log('API returning job:', randomJob)
     return NextResponse.json(randomJob)
   } catch (error: any) {
     console.error('Error fetching random job:', error)

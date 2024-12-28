@@ -24,15 +24,6 @@ export default function Oracle() {
     }
   }
 
-  const handleColorExtracted = (color: string) => {
-    console.log('Color extracted:', color)
-    setThemeColor(color)
-  }
-
-  useEffect(() => {
-    console.log('Theme color changed to:', themeColor)
-  }, [themeColor])
-
   useEffect(() => {
     loadRandomJob()
   }, [])

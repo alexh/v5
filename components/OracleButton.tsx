@@ -15,9 +15,6 @@ export default function OracleButton({
   color,
   variant = 'outline'
 }: OracleButtonProps) {
-  useEffect(() => {
-    console.log('OracleButton color:', color)
-  }, [color])
 
   const buttonClasses = `
     transition-all duration-200
