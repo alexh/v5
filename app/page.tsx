@@ -25,20 +25,20 @@ export default function Home() {
 
           <div className="flex justify-center items-center gap-4 mb-12">
             <a href="/oracle" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
-              <button className="font-receipt-narrow text-2xl px-4 py-2 rounded-lg">Oracle</button>
+              <button className="font-receipt-narrow text-lg px-4 py-2 rounded-lg">Oracle</button>
             </a>
             <a href="https://www.linkedin.com/in/alexhaynes32" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
-              <button className="font-receipt-narrow text-2xl px-4 py-2 rounded-lg">LinkedIn</button>
+              <button className="font-receipt-narrow text-lg px-4 py-2 rounded-lg">LinkedIn</button>
             </a>
             <a href="https://www.github.com/alexh" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
-              <button className="font-receipt-narrow text-2xl px-4 py-2 rounded-lg">GitHub</button>
+              <button className="font-receipt-narrow text-lg px-4 py-2 rounded-lg">GitHub</button>
             </a>
             <a href="mailto:alex@alexhaynes.org" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
-              <button className="font-receipt-narrow text-2xl px-4 py-2 rounded-lg">Email Me</button>
+              <button className="font-receipt-narrow text-lg px-4 py-2 rounded-lg">Email Me</button>
             </a>
           </div>
 
-          <div className="space-y-12 text-2xl text-theme-text text-content relative font-receipt-narrow">
+          <div className="space-y-12 text-lg text-theme-text text-content relative font-receipt-narrow">
             <p>
               I am a software engineer living in New York City, USA.
             </p>

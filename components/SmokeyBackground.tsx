@@ -56,7 +56,7 @@ const SmokeyBackground = () => {
     }
 
     // Check if a point is near any text node
-    const isNearText = (x: number, y: number, padding: number = 80) => {
+    const isNearText = (x: number, y: number, padding: number = 40) => {
       return textNodesRef.current.some(rect => {
         return x >= rect.left - padding &&
                x <= rect.right + padding &&
@@ -119,7 +119,7 @@ const SmokeyBackground = () => {
         }
 
         // Keep particles near text with stronger attraction
-        if (!isNearText(particle.x, particle.y, 150)) {
+        if (!isNearText(particle.x, particle.y, 80)) {
           const nearestText = textNodesRef.current.reduce<NearestResult>((nearest, rect) => {
             const centerX = rect.left + rect.width / 2
             const centerY = rect.top + rect.height / 2
@@ -137,14 +137,14 @@ const SmokeyBackground = () => {
           if (nearestText.rect) {
             const attractX = nearestText.rect.left + nearestText.rect.width / 2
             const attractY = nearestText.rect.top + nearestText.rect.height / 2
-            particle.vx += (attractX - particle.x) * 0.003
-            particle.vy += (attractY - particle.y) * 0.003
+            particle.vx += (attractX - particle.x) * 0.005
+            particle.vy += (attractY - particle.y) * 0.005
           }
         }
 
         // Even smoother damping
-        particle.vx *= 0.99
-        particle.vy *= 0.99
+        particle.vx *= 0.98
+        particle.vy *= 0.98
 
         // Enhanced particle drawing with larger core
         const innerSize = particle.size * 0.6

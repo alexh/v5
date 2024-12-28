@@ -7,12 +7,6 @@ import 'tailwindcss/tailwind.css'
 export const metadata: Metadata = {
   title: 'Alex Haynes',
   description: 'Software Engineer | Creative',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-  },
 }
 
 export default function RootLayout({
