@@ -5,8 +5,8 @@ import { ThemeProvider } from '../contexts/ThemeContext'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Your Site Name',
-  description: 'Your site description',
+  title: 'Alex Haynes',
+  description: 'Alex Haynes',
   icons: {
     icon: [
       { url: '/icons/icon-48x48.png', sizes: '48x48', type: 'image/png' },
