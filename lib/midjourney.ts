@@ -1,25 +1,36 @@
-import metadata from '../public/midjourney/metadata.json'
+interface JobMetadata {
+  id: string;
+  prompt: string;
+  image_url: string;
+  url: string;
+}
+
+interface MetadataMap {
+  [key: string]: JobMetadata;
+}
+
+import metadata from '../public/midjourney/metadata.json' assert { type: "json" };
 
 export interface MidjourneyJob {
-  id: string
-  prompt: string
-  url: string
+  id: string;
+  prompt: string;
+  url: string;
 }
 
 export function getMidjourneyData(): MidjourneyJob[] {
-  console.log('Metadata content:', metadata)
+  console.log('Metadata content:', metadata);
   // Convert object to array
-  const jobsArray = Object.values(metadata)
-  console.log('Converted to array:', jobsArray)
-  return jobsArray
+  const jobsArray = Object.values(metadata as MetadataMap);
+  console.log('Converted to array:', jobsArray);
+  return jobsArray;
 }
 
 export function getRandomJob(): MidjourneyJob {
-  const jobs = getMidjourneyData()
-  console.log('Available jobs:', jobs.length)
-  const randomIndex = Math.floor(Math.random() * jobs.length)
-  console.log('Selected index:', randomIndex)
-  const selectedJob = jobs[randomIndex]
-  console.log('Selected job:', selectedJob)
-  return selectedJob
+  const jobs = getMidjourneyData();
+  console.log('Available jobs:', jobs.length);
+  const randomIndex = Math.floor(Math.random() * jobs.length);
+  console.log('Selected index:', randomIndex);
+  const selectedJob = jobs[randomIndex];
+  console.log('Selected job:', selectedJob);
+  return selectedJob;
 } 

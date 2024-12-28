@@ -13,6 +13,11 @@ interface Point {
   size: number
 }
 
+interface NearestResult {
+  distance: number;
+  rect: DOMRect | null;
+}
+
 const SmokeyBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { currentTheme } = useTheme()
@@ -115,19 +120,23 @@ const SmokeyBackground = () => {
 
         // Keep particles near text with stronger attraction
         if (!isNearText(particle.x, particle.y, 150)) {
-          const nearestText = textNodesRef.current.reduce((nearest, rect) => {
+          const nearestText = textNodesRef.current.reduce<NearestResult>((nearest, rect) => {
             const centerX = rect.left + rect.width / 2
             const centerY = rect.top + rect.height / 2
             const d = Math.sqrt(
               Math.pow(particle.x - centerX, 2) + 
               Math.pow(particle.y - centerY, 2)
             )
-            return d < nearest.distance ? { distance: d, rect } : nearest
-          }, { distance: Infinity, rect: null }).rect
+            
+            if (d < nearest.distance) {
+              return { distance: d, rect }
+            }
+            return nearest
+          }, { distance: Infinity, rect: null })
 
-          if (nearestText) {
-            const attractX = nearestText.left + nearestText.width / 2
-            const attractY = nearestText.top + nearestText.height / 2
+          if (nearestText.rect) {
+            const attractX = nearestText.rect.left + nearestText.rect.width / 2
+            const attractY = nearestText.rect.top + nearestText.rect.height / 2
             particle.vx += (attractX - particle.x) * 0.003
             particle.vy += (attractY - particle.y) * 0.003
           }

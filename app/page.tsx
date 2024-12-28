@@ -24,6 +24,9 @@ export default function Home() {
           </h2>
 
           <div className="flex justify-center items-center gap-4 mb-12">
+            <a href="/oracle" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
+              <button className="font-receipt text-xl px-4 py-2 rounded-lg">Oracle</button>
+            </a>
             <a href="/Alex_Haynes.pdf" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt text-xl px-4 py-2 rounded-lg">Resume</button>
             </a>
@@ -35,9 +38,6 @@ export default function Home() {
             </a>
             <a href="mailto:alex@alexhaynes.org" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt text-xl px-4 py-2 rounded-lg">Email Me</button>
-            </a>
-            <a href="/oracle" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
-              <button className="font-receipt text-xl px-4 py-2 rounded-lg">Oracle</button>
             </a>
           </div>
 
