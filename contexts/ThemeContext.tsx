@@ -78,7 +78,7 @@ export const ThemeContext = createContext<ThemeContextType>({
 })
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState('default')
+  const [theme, setTheme] = useState('monochrome')
   const currentTheme = themes[theme as keyof typeof themes]
 
   useEffect(() => {
