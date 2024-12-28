@@ -18,7 +18,23 @@ interface NearestResult {
   rect: DOMRect | null;
 }
 
-const SmokeyBackground = () => {
+interface SmokeyBackgroundProps {
+  targetSelector?: string;
+  opacity?: number;
+  zIndex?: number;
+  particleCount?: number;
+  followText?: boolean;
+  color?: string;
+}
+
+const SmokeyBackground = ({
+  targetSelector = '.text-content',
+  opacity = 1,
+  zIndex = 1,
+  particleCount = 500,
+  followText = true,
+  color,
+}: SmokeyBackgroundProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { currentTheme } = useTheme()
   const particlesRef = useRef<Point[]>([])
@@ -33,9 +49,10 @@ const SmokeyBackground = () => {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    // Only target the text content div
+    // Modify the getTextNodes function to use the targetSelector
     const getTextNodes = () => {
-      const textContainer = document.querySelector('.text-content')
+      if (!followText) return []
+      const textContainer = document.querySelector(targetSelector)
       return textContainer ? [textContainer.getBoundingClientRect()] : []
     }
 
@@ -66,11 +83,18 @@ const SmokeyBackground = () => {
     }
 
     const createParticle = (): Point => {
-      let x, y
-      do {
+      let x, y;
+      
+      if (followText) {
+        do {
+          x = Math.random() * canvas.width
+          y = Math.random() * canvas.height
+        } while (!isNearText(x, y))
+      } else {
+        // If not following text, just create particles anywhere
         x = Math.random() * canvas.width
         y = Math.random() * canvas.height
-      } while (!isNearText(x, y))
+      }
 
       return {
         x,
@@ -84,7 +108,7 @@ const SmokeyBackground = () => {
     }
 
     const initParticles = () => {
-      particlesRef.current = Array.from({ length: 500 }, createParticle)
+      particlesRef.current = Array.from({ length: particleCount }, createParticle)
     }
 
     initParticles()
@@ -153,10 +177,13 @@ const SmokeyBackground = () => {
           particle.x, particle.y, particle.size
         )
         
+        // Use the color prop if provided, otherwise fall back to theme color
+        const particleColor = color || currentTheme.secondary
+
         // Brighter core with smoother gradient
-        gradient.addColorStop(0, hexToRgba(currentTheme.secondary, particle.opacity * 1.8))
-        gradient.addColorStop(0.3, hexToRgba(currentTheme.secondary, particle.opacity * 0.9))
-        gradient.addColorStop(1, hexToRgba(currentTheme.secondary, 0))
+        gradient.addColorStop(0, hexToRgba(particleColor, particle.opacity * 1.8 * opacity))
+        gradient.addColorStop(0.3, hexToRgba(particleColor, particle.opacity * 0.9 * opacity))
+        gradient.addColorStop(1, hexToRgba(particleColor, 0))
 
         ctx.beginPath()
         ctx.fillStyle = gradient
@@ -170,8 +197,8 @@ const SmokeyBackground = () => {
           particle.x, particle.y, 0,
           particle.x, particle.y, innerSize
         )
-        centerGlow.addColorStop(0, hexToRgba(currentTheme.secondary, particle.opacity * 2.25))
-        centerGlow.addColorStop(1, hexToRgba(currentTheme.secondary, 0))
+        centerGlow.addColorStop(0, hexToRgba(particleColor, particle.opacity * 2.25 * opacity))
+        centerGlow.addColorStop(1, hexToRgba(particleColor, 0))
 
         ctx.beginPath()
         ctx.fillStyle = centerGlow
@@ -200,12 +227,13 @@ const SmokeyBackground = () => {
         cancelAnimationFrame(frameRef.current)
       }
     }
-  }, [currentTheme])
+  }, [currentTheme, opacity, targetSelector, particleCount, followText, color])
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full pointer-events-none z-[1]"
+      className="fixed top-0 left-0 w-full h-full pointer-events-none"
+      style={{ zIndex }}
     />
   )
 }
