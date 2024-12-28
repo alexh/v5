@@ -1,7 +1,6 @@
-import React from 'react'
-import type { Metadata } from 'next'
-import { ThemeProvider } from '../contexts/ThemeContext'
 import './globals.css'
+import { ThemeProvider } from '../contexts/ThemeContext'
+import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Alex Haynes',
@@ -15,10 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <link rel="stylesheet" href="https://use.typekit.net/qzy8qpi.css" />
-      </head>
-      <body style={{ fontFamily: "receipt-narrow, sans-serif", fontWeight: 400, fontStyle: "normal" }}>
+      <body>
         <ThemeProvider>
           {children}
         </ThemeProvider>

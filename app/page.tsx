@@ -27,9 +27,9 @@ export default function Home() {
             <a href="/oracle" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt text-xl px-4 py-2 rounded-lg">Oracle</button>
             </a>
-            <a href="/Alex_Haynes.pdf" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
+            {/* <a href="/Alex_Haynes.pdf" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt text-xl px-4 py-2 rounded-lg">Resume</button>
-            </a>
+            </a> */}
             <a href="https://www.linkedin.com/in/alexhaynes32" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt text-xl px-4 py-2 rounded-lg">LinkedIn</button>
             </a>
