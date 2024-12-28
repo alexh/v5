@@ -7,7 +7,4 @@
 
 [build.environment]
   NEXT_USE_NETLIFY_EDGE = "true"
-  NODE_VERSION = "18"
-
-[build.processing]
-  skip_processing = true 
+  NODE_VERSION = "18" 
