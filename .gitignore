@@ -19,6 +19,8 @@
 
 /midjourney
 
+debug_page.html
+
 # Environment files
 .env
 .env*.local
