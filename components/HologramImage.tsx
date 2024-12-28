@@ -22,6 +22,7 @@ interface Particle {
   velocityY: number
   targetX: number
   targetY: number
+  isDead?: boolean
 }
 
 interface MeltingParticle {
@@ -40,12 +41,14 @@ interface HologramImageProps {
   src: string
   alt: string
   enableMouseInteraction?: boolean
+  onColorExtracted?: (color: string) => void
 }
 
 export default function HologramImage({ 
   src, 
   alt, 
-  enableMouseInteraction = false
+  enableMouseInteraction = false,
+  onColorExtracted
 }: HologramImageProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -96,21 +99,32 @@ export default function HologramImage({
     const containerRect = containerRef.current?.getBoundingClientRect()
     if (!containerRect) return []
 
+    // Calculate max height (60vh) and account for top padding
+    const maxHeight = window.innerHeight * 0.6
+    const topPadding = window.innerHeight * 0.05 // 5vh padding
+
     // Calculate image dimensions and position within container
     const imageAspect = image.width / image.height
     const containerAspect = containerWidth / containerHeight
     let imageWidth, imageHeight, imageX, imageY
 
     if (imageAspect > containerAspect) {
+      // Image is wider than container
       imageWidth = containerWidth
       imageHeight = containerWidth / imageAspect
-      imageX = containerRect.left
-      imageY = containerRect.top + (containerHeight - imageHeight) / 2
-    } else {
-      imageHeight = containerHeight
-      imageWidth = containerHeight * imageAspect
+      if (imageHeight > maxHeight) {
+        // Scale down if height exceeds max
+        imageHeight = maxHeight
+        imageWidth = maxHeight * imageAspect
+      }
       imageX = containerRect.left + (containerWidth - imageWidth) / 2
-      imageY = containerRect.top
+      imageY = containerRect.top + topPadding // Add top padding
+    } else {
+      // Image is taller than container
+      imageHeight = Math.min(containerHeight, maxHeight)
+      imageWidth = imageHeight * imageAspect
+      imageX = containerRect.left + (containerWidth - imageWidth) / 2
+      imageY = containerRect.top + topPadding // Add top padding
     }
 
     // Create temporary canvas for sampling
@@ -294,7 +308,8 @@ export default function HologramImage({
       const particles = particlesRef.current
       const visibleParticles = particles.filter(p => {
         return p.x >= -50 && p.x <= canvas.width + 50 && 
-               p.y >= -50 && p.y <= canvas.height + 50
+               p.y >= -50 && p.y <= canvas.height + 50 &&
+               !p.isDead
       })
 
       // Draw all base particles first
@@ -395,15 +410,39 @@ export default function HologramImage({
         const containerRect = containerRef.current?.getBoundingClientRect()
         const img = imageRef.current
         if (containerRect && img) {
-          // Create temporary canvas for sampling
+          // Calculate max height (60vh) and account for top padding
+          const maxHeight = window.innerHeight * 0.6
+          const topPadding = window.innerHeight * 0.05 // 5vh padding
+          
+          // Calculate max height and constrained dimensions
+          const imageAspect = img.width / img.height
+          const containerAspect = containerRect.width / containerRect.height
+          let imageWidth, imageHeight, imageX, imageY
+
+          if (imageAspect > containerAspect) {
+            imageWidth = containerRect.width
+            imageHeight = containerRect.width / imageAspect
+            if (imageHeight > maxHeight) {
+              imageHeight = maxHeight
+              imageWidth = maxHeight * imageAspect
+            }
+          } else {
+            imageHeight = Math.min(containerRect.height, maxHeight)
+            imageWidth = imageHeight * imageAspect
+          }
+
+          // Center the image
+          imageX = containerRect.left + (containerRect.width - imageWidth) / 2
+          imageY = containerRect.top + topPadding // Add top padding
+
+          // Draw the image onto temp canvas with correct dimensions
           const tempCanvas = document.createElement('canvas')
-          tempCanvas.width = containerRect.width
-          tempCanvas.height = containerRect.height
+          tempCanvas.width = imageWidth
+          tempCanvas.height = imageHeight
           const tempCtx = tempCanvas.getContext('2d')
           if (!tempCtx) return
 
-          // Draw the image onto temp canvas
-          tempCtx.drawImage(img, 0, 0, containerRect.width, containerRect.height)
+          tempCtx.drawImage(img, 0, 0, imageWidth, imageHeight)
 
           // Generate fewer particles per frame
           const particlesToAdd = Math.min(150, 24000 - meltingParticles.length)
@@ -418,34 +457,34 @@ export default function HologramImage({
 
             switch(edge) {
               case 0: // Top
-                sampleX = Math.floor(Math.random() * containerRect.width)
+                sampleX = Math.floor(Math.random() * imageWidth)
                 sampleY = insetAmount + Math.random() * edgeVariation
-                x = containerRect.left + sampleX
-                y = containerRect.top + sampleY
+                x = imageX + sampleX
+                y = imageY + sampleY
                 normalX = Math.random() * 0.4 - 0.2
                 normalY = -1
                 break
               case 1: // Right
-                sampleX = containerRect.width - 1 - (insetAmount + Math.random() * edgeVariation)
-                sampleY = Math.floor(Math.random() * containerRect.height)
-                x = containerRect.right - insetAmount
-                y = containerRect.top + sampleY
+                sampleX = imageWidth - 1 - (insetAmount + Math.random() * edgeVariation)
+                sampleY = Math.floor(Math.random() * imageHeight)
+                x = imageX + sampleX
+                y = imageY + sampleY
                 normalX = 1
                 normalY = Math.random() * 0.4 - 0.2
                 break
               case 2: // Bottom
-                sampleX = Math.floor(Math.random() * containerRect.width)
-                sampleY = containerRect.height - 1 - insetAmount
-                x = containerRect.left + sampleX
-                y = containerRect.bottom - insetAmount
+                sampleX = Math.floor(Math.random() * imageWidth)
+                sampleY = imageHeight - 1 - insetAmount
+                x = imageX + sampleX
+                y = imageY + sampleY
                 normalX = 0
                 normalY = 1
                 break
               case 3: // Left
                 sampleX = insetAmount
-                sampleY = Math.floor(Math.random() * containerRect.height)
-                x = containerRect.left + insetAmount
-                y = containerRect.top + sampleY
+                sampleY = Math.floor(Math.random() * imageHeight)
+                x = imageX + sampleX
+                y = imageY + sampleY
                 normalX = -1
                 normalY = 0
                 break
@@ -553,10 +592,86 @@ export default function HologramImage({
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
+  useEffect(() => {
+    if (showOriginal) {
+      // Increase delay to 500ms before despawning
+      setTimeout(() => {
+        particlesRef.current = particlesRef.current.filter(() => Math.random() > 0.5)
+      }, 500)
+    }
+  }, [showOriginal])
+
+  const extractAverageColor = (img: HTMLImageElement) => {
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return '#FF671F' // fallback to orange
+    
+    // Scale down for performance
+    canvas.width = 50
+    canvas.height = 50
+    ctx.drawImage(img, 0, 0, 50, 50)
+    
+    const imageData = ctx.getImageData(0, 0, 50, 50)
+    const data = imageData.data
+    
+    let r = 0, g = 0, b = 0, count = 0
+    
+    for (let i = 0; i < data.length; i += 4) {
+      const brightness = (data[i] + data[i + 1] + data[i + 2]) / 3
+      if (brightness > 20) { // Skip very dark pixels
+        r += data[i]
+        g += data[i + 1]
+        b += data[i + 2]
+        count++
+      }
+    }
+    
+    if (count === 0) return '#FF671F'
+    
+    r = Math.round(r / count)
+    g = Math.round(g / count)
+    b = Math.round(b / count)
+    
+    // Increase saturation
+    const max = Math.max(r, g, b)
+    const min = Math.min(r, g, b)
+    const d = max - min
+    const s = max === 0 ? 0 : d / max
+    const boost = Math.min(1.5, 1 + (1 - s))
+    
+    r = Math.min(255, Math.round((r - min) * boost + min))
+    g = Math.min(255, Math.round((g - min) * boost + min))
+    b = Math.min(255, Math.round((b - min) * boost + min))
+    
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
+  }
+
+  const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const container = containerRef.current
+    if (container && e.target instanceof HTMLImageElement) {
+      const canvas = canvasRef.current
+      const ctx = canvas?.getContext('2d')
+      if (ctx && canvas && container) {
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+        particlesRef.current = createParticlesFromImage(
+          ctx, 
+          e.target, 
+          container.clientWidth, 
+          container.clientHeight
+        )
+      }
+      
+      // Extract and pass up the color
+      const color = extractAverageColor(e.target)
+      onColorExtracted?.(color)
+    }
+  }
+
   return (
     <div 
       ref={containerRef}
-      className="relative w-full bg-black rounded-lg"
+      className="relative w-full bg-black"
     >
       <div className="relative w-full">
         {/* Hidden preload image */}
@@ -565,43 +680,29 @@ export default function HologramImage({
           alt={alt}
           ref={imageRef}
           className="w-full h-auto opacity-0"
-          onLoad={(e) => {
-            const container = containerRef.current
-            if (container && e.target instanceof HTMLImageElement) {
-              const canvas = canvasRef.current
-              const ctx = canvas?.getContext('2d')
-              if (ctx && canvas && container) {
-                canvas.width = window.innerWidth
-                canvas.height = window.innerHeight
-                particlesRef.current = createParticlesFromImage(
-                  ctx, 
-                  e.target, 
-                  container.clientWidth, 
-                  container.clientHeight
-                )
-              }
-            }
-          }}
+          onLoad={handleImageLoad}
         />
 
-        {/* Base image layer */}
+        {/* Base image layer with max height constraint */}
         {imageLoaded && (
-          <img
-            src={src}
-            alt={alt}
-            className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-[3000ms] mix-blend-lighten ${
-              showOriginal ? 'opacity-70' : 'opacity-0'
-            }`}
-            style={{ filter: 'none' }}
-          />
+          <div className="absolute inset-0 flex items-start justify-center pt-[5vh]">
+            <img
+              src={src}
+              alt={alt}
+              className={`w-full h-auto max-h-[60vh] object-contain transition-opacity duration-[3000ms] mix-blend-lighten ${
+                showOriginal ? 'opacity-70' : 'opacity-0'
+              }`}
+              style={{ 
+                filter: 'none'
+              }}
+            />
+          </div>
         )}
         
-        {/* Main particle canvas with increased opacity */}
+        {/* Main particle canvas stays fullscreen */}
         <canvas
           ref={canvasRef}
-          className={`fixed top-0 left-0 w-screen h-screen pointer-events-none transition-opacity duration-[3000ms] ${
-            showOriginal ? 'opacity-100' : 'opacity-100'
-          }`}
+          className="fixed top-0 left-0 w-screen h-screen pointer-events-none transition-opacity duration-[3000ms]"
           style={{ 
             zIndex: 1,
             mixBlendMode: 'screen'
