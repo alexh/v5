@@ -17,7 +17,13 @@ export default function Oracle() {
   const loadRandomJob = async () => {
     try {
       setJob(null)
-      const response = await fetch('/api/random-job')
+      const timestamp = Date.now()
+      const response = await fetch(`/api/random-job?t=${timestamp}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      })
       const data = await response.json()
       setJob(data)
     } catch (error) {
