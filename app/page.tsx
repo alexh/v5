@@ -5,15 +5,17 @@ import { ThemeSelector } from '../components/ThemeSelector'
 import { useTheme } from '../contexts/ThemeContext'
 import SmokeyBackground from '../components/SmokeyBackground'
 import SnowEffect from '../components/SnowEffect'
+import CrtGrid from '../components/CrtGrid'
 
 export default function Home() {
   const { currentTheme } = useTheme()
 
   return (
     <main className="min-h-screen p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative">
+      <CrtGrid />
       <SnowEffect />
       <SmokeyBackground />
-      <div className="max-w-3xl mx-auto relative z-10">
+      <div className="max-w-3xl mx-auto relative z-20">
         <div className="relative z-20">
           <h1 className="text-8xl font-extrabold italic text-center mb-1 pl-3 font-forma text-theme-text">
             Alex Haynes
