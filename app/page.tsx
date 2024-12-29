@@ -3,15 +3,15 @@
 import React from 'react'
 import { ThemeSelector } from '../components/ThemeSelector'
 import { useTheme } from '../contexts/ThemeContext'
-import MatrixRain from '../components/MatrixRain'
 import SmokeyBackground from '../components/SmokeyBackground'
+import SnowEffect from '../components/SnowEffect'
 
 export default function Home() {
   const { currentTheme } = useTheme()
 
   return (
     <main className="min-h-screen p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative">
-      <MatrixRain />
+      <SnowEffect />
       <SmokeyBackground />
       <div className="max-w-3xl mx-auto relative z-10">
         <div className="relative z-20">
