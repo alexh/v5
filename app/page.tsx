@@ -74,15 +74,13 @@ export default function Home() {
             </p>
             
             <p>
-              Beyond the world of coding, I make full use of my down time, whether it's skiing; exploring new places; 
-              spending time with my dog, <a 
+              Outside of work, I make full use of my down time - whether skiing, exploring new places, spending time with my dog, <a 
                 href="https://www.instagram.com/bolognaboynyc"
                 className="underline hover:text-theme-secondary transition-colors pointer-events-auto cursor-pointer"
-              >Bologna</a>; or building and designing for my clothing brand, <a 
+              >Bologna</a>, or building and designing for my clothing brand, <a 
                 href="https://utility.materials.nyc"
                 className="underline hover:text-theme-secondary transition-colors pointer-events-auto cursor-pointer"
-              >Utility Materials, Inc.</a>, my clothing brand. Additionally, I'm developing a rogue-like 
-              platform fighting game.
+              >Utility Materials, Inc.</a> Additionally, I'm developing a rogue-like platform fighting game.
             </p>
           </div>
 
