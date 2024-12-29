@@ -412,8 +412,18 @@ export default function JacketViewer() {
         />
       </div>
 
-      <div className="w-full h-full grid grid-cols-2 gap-8 relative z-10">
-        <div className="relative border-2 border-[#4488ff] rounded-lg">
+      <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+        <div className="order-1 md:order-2 border-2 border-[#4488ff] rounded-lg bg-[#000033]/80 overflow-auto max-h-[50vh] md:max-h-full">
+          <TerminalUI 
+            selectedItem={selectedItem} 
+            wireframe={wireframe}
+            setWireframe={setWireframe}
+            setSelectedItem={setSelectedItem}
+            modelStats={modelStats}
+          />
+        </div>
+
+        <div className="order-2 md:order-1 relative border-2 border-[#4488ff] rounded-lg h-[50vh] md:h-auto">
           <div className="absolute top-0 left-0 z-10 p-2 font-receipt-narrow text-[#00ffff] text-sm bg-[#000033]/80 rounded-tl-lg border-r-2 border-b-2 border-[#4488ff]">
             ORBIT_CAM_01 {`>`} RENDERING... {wireframe ? '[WIREFRAME]' : '[SOLID]'}
           </div>
@@ -456,16 +466,6 @@ export default function JacketViewer() {
               onStatsCalculated={setModelStats}
             />
           </Canvas>
-        </div>
-
-        <div className="border-2 border-[#4488ff] rounded-lg bg-[#000033]/80 overflow-auto">
-          <TerminalUI 
-            selectedItem={selectedItem} 
-            wireframe={wireframe}
-            setWireframe={setWireframe}
-            setSelectedItem={setSelectedItem}
-            modelStats={modelStats}
-          />
         </div>
       </div>
     </div>
