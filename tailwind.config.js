@@ -19,6 +19,7 @@ module.exports = {
       },
       animation: {
         'pulse-glow': 'pulse-glow 4s ease-in-out infinite',
+        scanline: 'scanline 4s linear infinite'
       },
       keyframes: {
         'pulse-glow': {
@@ -29,6 +30,10 @@ module.exports = {
             filter: 'drop-shadow(0 0 22px rgba(255, 255, 255, 0.7))',
           },
         },
+        scanline: {
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(100%)' }
+        }
       },
     },
   },
