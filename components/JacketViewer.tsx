@@ -5,6 +5,7 @@ import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, useGLTF, Environment } from '@react-three/drei'
 import * as THREE from 'three'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
+import Link from 'next/link'
 
 type Item = {
   id: string;
@@ -394,6 +395,14 @@ export default function JacketViewer() {
 
   return (
     <div className="fixed inset-0 bg-[#000033] p-8">
+      <Link 
+        href="/"
+        className="absolute top-8 right-8 z-30 px-4 py-2 font-receipt-narrow text-[#00ffff] 
+                 hover:bg-[#4488ff]/20 transition-colors duration-200 flex items-center gap-2"
+      >
+        {`<`} RETURN_HOME
+      </Link>
+
       <div className="absolute inset-0 pointer-events-none z-20">
         <div className="w-full h-full animate-scanline bg-gradient-to-b from-transparent via-[#00ffff]/10 to-transparent" 
              style={{
