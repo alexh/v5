@@ -8,12 +8,13 @@ import SmokeyBackground from '../components/SmokeyBackground'
 import SnowEffect from '../components/SnowEffect'
 import CrtGrid from '../components/CrtGrid'
 import MoonPhase from '../components/MoonPhase'
+import ElevenLabsWidget from '../components/ElevenLabsWidget'
 
 export default function Home() {
   const { currentTheme } = useTheme()
 
   return (
-    <main className="min-h-screen p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative">
+    <main className="h-screen overflow-hidden p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative">
       <CrtGrid />
       <SnowEffect />
       <SmokeyBackground />
@@ -26,17 +27,19 @@ export default function Home() {
         <ThemeSelector initialPosition={{ x: 32, y: 32 }} />
       </div>
 
-      <div className="max-w-3xl mx-auto relative z-20">
-        <div className="relative z-20">
-          <h1 className="text-8xl font-extrabold italic text-center mb-1 pl-3 font-forma text-theme-text">
+      <ElevenLabsWidget />
+
+      <div className="h-full max-w-3xl mx-auto relative z-20 flex flex-col">
+        <div className="relative z-20 flex-1 overflow-y-auto scrollbar-hide">
+          <h1 className="text-7xl font-extrabold italic text-center mb-1 pl-3 font-forma text-theme-text">
             Alex Haynes
           </h1>
           
-          <h2 className="text-4xl text-center mb-12 font-forma text-theme-text">
+          <h2 className="text-3xl text-center mb-8 font-forma text-theme-text">
             Software Engineer | Creative
           </h2>
 
-          <div className="flex justify-center items-center gap-4 mb-12">
+          <div className="flex flex-wrap justify-center items-center gap-4 mb-8">
             <a href="/oracle" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt-narrow text-lg px-4 py-2 rounded-lg">Oracle</button>
             </a>
@@ -54,7 +57,7 @@ export default function Home() {
             </a>
           </div>
 
-          <div className="space-y-12 text-lg text-theme-text text-content relative font-receipt-narrow">
+          <div className="space-y-8 text-lg text-theme-text text-content relative font-receipt-narrow">
             <p>
               I am a software engineer living in New York City, USA.
             </p>
@@ -84,7 +87,7 @@ export default function Home() {
             <InlineThemeSelector />
           </div>
 
-          <footer className="text-center text-theme-text font-receipt-narrow mt-8 md:mt-12">
+          <footer className="text-center text-theme-text font-receipt-narrow mt-6 md:mt-8">
             © {new Date().getFullYear()}, Built with love ❤️
           </footer>
         </div>

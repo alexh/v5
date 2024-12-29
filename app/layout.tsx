@@ -1,6 +1,7 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '../contexts/ThemeContext'
+import ElevenLabsWidget from '../components/ElevenLabsWidget'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -26,6 +27,7 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <ThemeProvider>
+          <ElevenLabsWidget />
           {children}
         </ThemeProvider>
       </body>
