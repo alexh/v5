@@ -81,7 +81,7 @@ export default function Home() {
             <InlineThemeSelector />
           </div>
 
-          <footer className="text-center text-theme-text font-receipt-narrow">
+          <footer className="text-center text-theme-text font-receipt-narrow mt-8 md:mt-12">
             © {new Date().getFullYear()}, Built with love ❤️
           </footer>
         </div>
