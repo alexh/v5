@@ -22,7 +22,7 @@ export default function MoonPhase() {
   const [currentTime, setCurrentTime] = useState('')
   
   const TOTAL_FRAMES = 22
-  const FRAME_DURATION = 1000
+  const FRAME_DURATION = 3000
   const MOON_SIZE = 96
   const PARTICLE_DENSITY = 3
   const TRANSITION_SPEED = 0.05
