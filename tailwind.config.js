@@ -17,6 +17,19 @@ module.exports = {
         'theme-secondary': 'var(--theme-secondary)',
         'theme-text': 'var(--theme-text)',
       },
+      animation: {
+        'pulse-glow': 'pulse-glow 4s ease-in-out infinite',
+      },
+      keyframes: {
+        'pulse-glow': {
+          '0%, 100%': {
+            filter: 'drop-shadow(0 0 15px rgba(255, 255, 255, 0.5))',
+          },
+          '50%': {
+            filter: 'drop-shadow(0 0 22px rgba(255, 255, 255, 0.7))',
+          },
+        },
+      },
     },
   },
   plugins: [],

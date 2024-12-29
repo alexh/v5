@@ -1,28 +1,13 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { RetroWindow } from './RetroWindow'
+import React from 'react'
 import { useTheme } from '../contexts/ThemeContext'
 
-interface ThemeSelectorProps {
-  initialPosition?: { x: number; y: number }
-  forcePosition?: boolean
-}
-
-export function ThemeSelector({ initialPosition, forcePosition }: ThemeSelectorProps) {
-  const { theme, setTheme, currentTheme } = useTheme()
-  const [position, setPosition] = useState({ x: 20, y: 20 })
-
-  useEffect(() => {
-    setPosition({ x: 20, y: 20 })
-  }, [])
+export function InlineThemeSelector() {
+  const { theme, setTheme } = useTheme()
 
   return (
-    <RetroWindow 
-      title="Theme Selector" 
-      initialPosition={initialPosition}
-      forcePosition={forcePosition}
-    >
+    <div className="w-full max-w-xs mx-auto mb-8 px-4">
       <select 
         value={theme}
         onChange={(e) => setTheme(e.target.value)}
@@ -39,6 +24,6 @@ export function ThemeSelector({ initialPosition, forcePosition }: ThemeSelectorP
         <option value="neon">Neon</option>
         <option value="cog">Cog</option>
       </select>
-    </RetroWindow>
+    </div>
   )
 } 

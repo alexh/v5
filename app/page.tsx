@@ -2,10 +2,12 @@
 
 import React from 'react'
 import { ThemeSelector } from '../components/ThemeSelector'
+import { InlineThemeSelector } from '../components/InlineThemeSelector'
 import { useTheme } from '../contexts/ThemeContext'
 import SmokeyBackground from '../components/SmokeyBackground'
 import SnowEffect from '../components/SnowEffect'
 import CrtGrid from '../components/CrtGrid'
+import MoonPhase from '../components/MoonPhase'
 
 export default function Home() {
   const { currentTheme } = useTheme()
@@ -15,6 +17,15 @@ export default function Home() {
       <CrtGrid />
       <SnowEffect />
       <SmokeyBackground />
+      
+      <div className="hidden md:block">
+        <MoonPhase />
+      </div>
+
+      <div className="hidden md:block">
+        <ThemeSelector initialPosition={{ x: 32, y: 32 }} />
+      </div>
+
       <div className="max-w-3xl mx-auto relative z-20">
         <div className="relative z-20">
           <h1 className="text-8xl font-extrabold italic text-center mb-1 pl-3 font-forma text-theme-text">
@@ -66,12 +77,15 @@ export default function Home() {
             </p>
           </div>
 
-          <footer className="text-center mt-12 text-theme-text font-receipt-narrow">
+          <div className="block md:hidden">
+            <InlineThemeSelector />
+          </div>
+
+          <footer className="text-center text-theme-text font-receipt-narrow">
             © {new Date().getFullYear()}, Built with love ❤️
           </footer>
         </div>
       </div>
-      <ThemeSelector />
     </main>
   )
 } 
