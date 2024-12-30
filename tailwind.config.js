@@ -10,7 +10,7 @@ module.exports = {
       fontFamily: {
         'receipt': ['Receipt', 'monospace'],
         'receipt-narrow': ['receipt-narrow', 'sans-serif'],
-        'forma': ['forma-djr-banner', 'sans-serif'],
+        'nickel': ['Nickel', 'sans-serif'],
       },
       colors: {
         'theme-primary': 'var(--theme-primary)',
@@ -19,7 +19,8 @@ module.exports = {
       },
       animation: {
         'pulse-glow': 'pulse-glow 4s ease-in-out infinite',
-        scanline: 'scanline 4s linear infinite'
+        scanline: 'scanline 4s linear infinite',
+        glow: 'glow 3s ease-in-out infinite'
       },
       keyframes: {
         'pulse-glow': {
@@ -33,6 +34,10 @@ module.exports = {
         scanline: {
           '0%': { transform: 'translateY(-100%)' },
           '100%': { transform: 'translateY(100%)' }
+        },
+        glow: {
+          '0%, 100%': { textShadow: '0 0 4px rgba(255,255,255,0.5)' },
+          '50%': { textShadow: '0 0 16px rgba(255,255,255,0.8)' }
         }
       },
     },

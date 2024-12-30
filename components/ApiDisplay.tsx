@@ -102,7 +102,7 @@ export default function ApiDisplay() {
   }
 
   return (
-    <div className="space-y-8 font-receipt-narrow pl-[200px] pr-[50px]">
+    <div className="space-y-8 font-receipt-narrow max-w-[800px] mx-auto px-4 lg:px-8">
       {/* API Info Section */}
       <div className="border border-theme-text/30 p-4 rounded">
         <h2 className="text-2xl mb-4">Materials API</h2>
@@ -116,8 +116,10 @@ export default function ApiDisplay() {
         </div>
       </div>
 
-      {/* Add RequestVisualizer here, outside of any conditional rendering */}
-      <RequestVisualizer isLoading={loading} onComplete={handleAnimationComplete} />
+      {/* RequestVisualizer - hidden on md and smaller screens */}
+      <div className="hidden lg:block">
+        <RequestVisualizer isLoading={loading} onComplete={handleAnimationComplete} />
+      </div>
 
       {/* Welcome Endpoint Section */}
       <div className="border border-theme-text/30 p-4 rounded">

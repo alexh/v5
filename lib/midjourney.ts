@@ -26,4 +26,10 @@ export function getRandomJob(): MidjourneyJob {
   const jobs = getMidjourneyData();
   const randomIndex = Math.floor(Math.random() * jobs.length);
   return jobs[randomIndex];
+}
+
+export async function getRandomJobs(count: number = 5): Promise<MidjourneyJob[]> {
+  const jobs = getMidjourneyData()
+  const shuffled = [...jobs].sort(() => 0.5 - Math.random())
+  return shuffled.slice(0, count)
 } 

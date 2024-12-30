@@ -4,7 +4,7 @@ import React, { useState, Suspense, useEffect } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, useGLTF, Environment } from '@react-three/drei'
 import * as THREE from 'three'
-import { EffectComposer, Bloom } from '@react-three/postprocessing'
+import { Selection, EffectComposer, Outline } from '@react-three/postprocessing'
 import Link from 'next/link'
 
 type Item = {
@@ -348,14 +348,24 @@ function Scene({ wireframe, modelPath, config, onStatsCalculated }: {
       <color attach="background" args={['#000033']} />
       <Lights modelPath={modelPath} />
       <Environment preset="warehouse" />
-      <Suspense fallback={null}>
-        <Model 
-          wireframe={wireframe} 
-          modelPath={modelPath} 
-          config={config}
-          onStatsCalculated={onStatsCalculated}
-        />
-      </Suspense>
+      <Selection>
+        <EffectComposer multisampling={8} autoClear={false}>
+          <Outline 
+            visibleEdgeColor={0x00ffff}
+            hiddenEdgeColor={0x4488ff}
+            blur
+            edgeStrength={wireframe ? 3 : 0}
+          />
+        </EffectComposer>
+        <Suspense fallback={null}>
+          <Model 
+            wireframe={wireframe} 
+            modelPath={modelPath} 
+            config={config}
+            onStatsCalculated={onStatsCalculated}
+          />
+        </Suspense>
+      </Selection>
       <OrbitControls 
         autoRotate
         autoRotateSpeed={1.0}
@@ -368,17 +378,6 @@ function Scene({ wireframe, modelPath, config, onStatsCalculated }: {
         target={[0, 0, 0]}
         makeDefault
       />
-      {wireframe && (
-        <EffectComposer>
-          <Bloom 
-            intensity={0.2}
-            luminanceThreshold={0.2}
-            luminanceSmoothing={0.9}
-            mipmapBlur
-            radius={0.3}
-          />
-        </EffectComposer>
-      )}
     </>
   )
 }

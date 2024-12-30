@@ -49,11 +49,24 @@ const SmokeyBackground = ({
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    // Modify the getTextNodes function to use the targetSelector
     const getTextNodes = () => {
       if (!followText) return []
       const textContainer = document.querySelector(targetSelector)
-      return textContainer ? [textContainer.getBoundingClientRect()] : []
+      if (!textContainer) return []
+      
+      const rect = textContainer.getBoundingClientRect()
+      // Shift the entire area downward
+      return [{
+        top: rect.top + 100,     // Move down by 200px
+        bottom: rect.bottom + 300, // Extend bottom further
+        left: rect.left - 100,    
+        right: rect.right + 100,  
+        width: rect.width + 200,  
+        height: rect.height + 300,
+        x: rect.x - 100,
+        y: rect.y + 200,         // Move down by 200px
+        toJSON: () => rect.toJSON()
+      } as DOMRect]
     }
 
     const resizeCanvas = () => {
@@ -72,8 +85,7 @@ const SmokeyBackground = ({
       return `rgba(${r}, ${g}, ${b}, ${alpha})`
     }
 
-    // Check if a point is near any text node
-    const isNearText = (x: number, y: number, padding: number = 40) => {
+    const isNearText = (x: number, y: number, padding: number = 100) => {  // Increased padding
       return textNodesRef.current.some(rect => {
         return x >= rect.left - padding &&
                x <= rect.right + padding &&
@@ -84,14 +96,17 @@ const SmokeyBackground = ({
 
     const createParticle = (): Point => {
       let x, y;
+      let attempts = 0;
+      const maxAttempts = 50;
       
       if (followText) {
         do {
           x = Math.random() * canvas.width
           y = Math.random() * canvas.height
+          attempts++
+          if (attempts > maxAttempts) break
         } while (!isNearText(x, y))
       } else {
-        // If not following text, just create particles anywhere
         x = Math.random() * canvas.width
         y = Math.random() * canvas.height
       }
@@ -99,11 +114,11 @@ const SmokeyBackground = ({
       return {
         x,
         y,
-        vx: (Math.random() - 0.5) * 0.2,
-        vy: (Math.random() - 0.5) * 0.2,
+        vx: (Math.random() - 0.5) * 0.05,  // Reduced initial velocity
+        vy: (Math.random() - 0.5) * 0.05,  // Reduced initial velocity
         life: Math.random() * 400 + 400,
         opacity: Math.random() * 0.5 + 0.3,
-        size: Math.random() * 80 + 40
+        size: Math.random() * 100 + 50
       }
     }
 
@@ -126,11 +141,11 @@ const SmokeyBackground = ({
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       particlesRef.current.forEach((particle, i) => {
-        // Natural movement
-        particle.x += particle.vx
-        particle.y += particle.vy
+        // Natural movement with reduced velocity
+        particle.x += particle.vx * 0.5  // Added dampening factor
+        particle.y += particle.vy * 0.5  // Added dampening factor
 
-        // Enhanced mouse repulsion
+        // Mouse repulsion with gentler force
         const dx = mouseRef.current.x - particle.x
         const dy = mouseRef.current.y - particle.y
         const distance = Math.sqrt(dx * dx + dy * dy)
@@ -138,11 +153,11 @@ const SmokeyBackground = ({
         
         if (distance < repulsionRadius) {
           const force = (repulsionRadius - distance) / repulsionRadius
-          particle.vx -= (dx / distance) * force * 0.2
-          particle.vy -= (dy / distance) * force * 0.2
+          particle.vx -= (dx / distance) * force * 0.1  // Reduced force
+          particle.vy -= (dy / distance) * force * 0.1  // Reduced force
         }
 
-        // Keep particles near text with stronger attraction
+        // Text attraction with gentler force
         if (!isNearText(particle.x, particle.y, 80)) {
           const nearestText = textNodesRef.current.reduce<NearestResult>((nearest, rect) => {
             const centerX = rect.left + rect.width / 2
@@ -161,14 +176,14 @@ const SmokeyBackground = ({
           if (nearestText.rect) {
             const attractX = nearestText.rect.left + nearestText.rect.width / 2
             const attractY = nearestText.rect.top + nearestText.rect.height / 2
-            particle.vx += (attractX - particle.x) * 0.005
-            particle.vy += (attractY - particle.y) * 0.005
+            particle.vx += (attractX - particle.x) * 0.002  // Reduced attraction force
+            particle.vy += (attractY - particle.y) * 0.002  // Reduced attraction force
           }
         }
 
-        // Even smoother damping
-        particle.vx *= 0.98
-        particle.vy *= 0.98
+        // Stronger damping for smoother movement
+        particle.vx *= 0.99  // Increased damping
+        particle.vy *= 0.99  // Increased damping
 
         // Enhanced particle drawing with larger core
         const innerSize = particle.size * 0.6
@@ -177,7 +192,6 @@ const SmokeyBackground = ({
           particle.x, particle.y, particle.size
         )
         
-        // Use the color prop if provided, otherwise fall back to theme color
         const particleColor = color || currentTheme.secondary
 
         // Brighter core with smoother gradient
