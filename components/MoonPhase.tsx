@@ -15,7 +15,7 @@ interface Particle {
 export default function MoonPhase() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<Particle[]>([])
-  const [currentFrame, setCurrentFrame] = useState(0)
+  const [_currentFrame, setCurrentFrame] = useState(0)
   const frameDataRef = useRef<ImageData[]>([])
   const animationFrameId = useRef<number>()
   const loadedRef = useRef(false)
