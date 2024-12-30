@@ -109,10 +109,10 @@ const GlowingText = ({ children, className = "", delay = 0 }: GlowingTextProps) 
 
 export default function OracleIntro() {
   const [visions, setVisions] = useState<Vision[]>([])
-  const [loading, setLoading] = useState(true)
-  const [scope, animate] = useAnimate()
+  const [_loading, setLoading] = useState(true)
+  const [_animate] = useAnimate()
   const loadedImages = useRef(0)
-  const jobsCache = useRef<any[]>([])
+  const jobsCache = useRef<Record<string, unknown>[]>([])
 
   // Preload jobs
   useEffect(() => {
@@ -188,7 +188,7 @@ export default function OracleIntro() {
   }
 
   return (
-    <div className="relative min-h-screen bg-black overflow-hidden" ref={scope}>
+    <div className="relative min-h-screen bg-black overflow-hidden" ref={_animate}>
       {/* Mystical background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-zinc-900/30 via-zinc-900/20 to-black" />
       

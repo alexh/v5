@@ -90,7 +90,7 @@ function Model({
   React.useEffect(() => {
     let triangles = 0
     let vertices = 0
-    let materials = new Set()
+    const materials = new Set()
 
     gltf.scene.traverse((child) => {
       if (child instanceof THREE.Mesh) {
@@ -385,11 +385,11 @@ function Scene({ wireframe, modelPath, config, onStatsCalculated }: {
 export default function JacketViewer() {
   const [selectedItem, setSelectedItem] = useState(ITEMS[0])
   const [wireframe, setWireframe] = useState(true)
-  const [config, setConfig] = useState<ModelConfig>(selectedItem.config!)
+  const [config, setConfig] = useState<ModelConfig>(selectedItem.config ?? ITEMS[0].config)
   const [modelStats, setModelStats] = useState<ModelStats | null>(null)
 
   useEffect(() => {
-    setConfig(selectedItem.config!)
+    setConfig(selectedItem.config ?? ITEMS[0].config)
   }, [selectedItem])
 
   return (

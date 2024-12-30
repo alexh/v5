@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 
 interface Particle {
   x: number
@@ -60,7 +61,8 @@ export default function HologramImage({
   const imageRef = useRef<HTMLImageElement | null>(null)
   const meltingParticlesRef = useRef<MeltingParticle[]>([])
   const canStartMeltingRef = useRef(false)
-  const meltingCanvasRef = useRef<HTMLCanvasElement>(null)
+  const _meltingCanvasRef = useRef<HTMLCanvasElement>(null)
+  const _motion = motion
   
   const drawParticle = (
     ctx: CanvasRenderingContext2D, 
@@ -106,31 +108,31 @@ export default function HologramImage({
     // Calculate image dimensions and position within container
     const imageAspect = image.width / image.height
     const containerAspect = containerWidth / containerHeight
-    let imageWidth, imageHeight, imageX, imageY
+    let finalImageWidth: number, finalImageHeight: number, finalImageX: number, finalImageY: number
 
     if (imageAspect > containerAspect) {
       // Image is wider than container
-      imageWidth = containerWidth
-      imageHeight = containerWidth / imageAspect
-      if (imageHeight > maxHeight) {
+      finalImageWidth = containerWidth
+      finalImageHeight = containerWidth / imageAspect
+      if (finalImageHeight > maxHeight) {
         // Scale down if height exceeds max
-        imageHeight = maxHeight
-        imageWidth = maxHeight * imageAspect
+        finalImageHeight = maxHeight
+        finalImageWidth = maxHeight * imageAspect
       }
-      imageX = containerRect.left + (containerWidth - imageWidth) / 2
-      imageY = containerRect.top + topPadding // Add top padding
+      finalImageX = containerRect.left + (containerWidth - finalImageWidth) / 2
+      finalImageY = containerRect.top + topPadding // Add top padding
     } else {
       // Image is taller than container
-      imageHeight = Math.min(containerHeight, maxHeight)
-      imageWidth = imageHeight * imageAspect
-      imageX = containerRect.left + (containerWidth - imageWidth) / 2
-      imageY = containerRect.top + topPadding // Add top padding
+      finalImageHeight = Math.min(containerHeight, maxHeight)
+      finalImageWidth = finalImageHeight * imageAspect
+      finalImageX = containerRect.left + (containerWidth - finalImageWidth) / 2
+      finalImageY = containerRect.top + topPadding // Add top padding
     }
 
     // Create temporary canvas for sampling
     const tempCanvas = document.createElement('canvas')
-    tempCanvas.width = imageWidth
-    tempCanvas.height = imageHeight
+    tempCanvas.width = finalImageWidth
+    tempCanvas.height = finalImageHeight
     const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true })
     if (!tempCtx) return []
 
@@ -139,14 +141,14 @@ export default function HologramImage({
     const particles: Particle[] = []
     
     const scaleFactor = 0.5
-    tempCanvas.width = imageWidth * scaleFactor
-    tempCanvas.height = imageHeight * scaleFactor
+    tempCanvas.width = finalImageWidth * scaleFactor
+    tempCanvas.height = finalImageHeight * scaleFactor
     tempCtx.drawImage(image, 0, 0, tempCanvas.width, tempCanvas.height)
     const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height)
-    const pixels = imageData.data
+    const pixels = imageData.data?.map(Number) ?? []
 
-    for(let y = 0; y < imageHeight; y += sampleRate) {
-      for(let x = 0; x < imageWidth; x += sampleRate) {
+    for(let y = 0; y < finalImageHeight; y += sampleRate) {
+      for(let x = 0; x < finalImageWidth; x += sampleRate) {
         if (Math.random() < skipChance) continue
 
         const sX = Math.floor(x * scaleFactor)
@@ -159,8 +161,8 @@ export default function HologramImage({
         
         if (a > 100 && (r + g + b) > 30) {
           // Calculate final position relative to the image position in the container
-          const finalX = imageX + x
-          const finalY = imageY + y
+          const finalX = finalImageX + x
+          const finalY = finalImageY + y
 
           // Generate starting position from screen edges
           let initialX, initialY
@@ -417,7 +419,7 @@ export default function HologramImage({
           // Calculate max height and constrained dimensions
           const imageAspect = img.width / img.height
           const containerAspect = containerRect.width / containerRect.height
-          let imageWidth, imageHeight, imageX, imageY
+          let imageWidth, imageHeight, _imageX, _imageY
 
           if (imageAspect > containerAspect) {
             imageWidth = containerRect.width
@@ -432,8 +434,8 @@ export default function HologramImage({
           }
 
           // Center the image
-          imageX = containerRect.left + (containerRect.width - imageWidth) / 2
-          imageY = containerRect.top + topPadding // Add top padding
+          const finalImageX = containerRect.left + (containerRect.width - imageWidth) / 2
+          const finalImageY = containerRect.top + topPadding // Add top padding
 
           // Draw the image onto temp canvas with correct dimensions
           const tempCanvas = document.createElement('canvas')
@@ -459,32 +461,32 @@ export default function HologramImage({
               case 0: // Top
                 sampleX = Math.floor(Math.random() * imageWidth)
                 sampleY = insetAmount + Math.random() * edgeVariation
-                x = imageX + sampleX
-                y = imageY + sampleY
+                x = finalImageX + sampleX
+                y = finalImageY + sampleY
                 normalX = Math.random() * 0.4 - 0.2
                 normalY = -1
                 break
               case 1: // Right
                 sampleX = imageWidth - 1 - (insetAmount + Math.random() * edgeVariation)
                 sampleY = Math.floor(Math.random() * imageHeight)
-                x = imageX + sampleX
-                y = imageY + sampleY
+                x = finalImageX + sampleX
+                y = finalImageY + sampleY
                 normalX = 1
                 normalY = Math.random() * 0.4 - 0.2
                 break
               case 2: // Bottom
                 sampleX = Math.floor(Math.random() * imageWidth)
                 sampleY = imageHeight - 1 - insetAmount
-                x = imageX + sampleX
-                y = imageY + sampleY
+                x = finalImageX + sampleX
+                y = finalImageY + sampleY
                 normalX = 0
                 normalY = 1
                 break
               case 3: // Left
                 sampleX = insetAmount
                 sampleY = Math.floor(Math.random() * imageHeight)
-                x = imageX + sampleX
-                y = imageY + sampleY
+                x = finalImageX + sampleX
+                y = finalImageY + sampleY
                 normalX = -1
                 normalY = 0
                 break
@@ -537,7 +539,8 @@ export default function HologramImage({
         ctx.save()
         ctx.translate(p.x, p.y)
         ctx.rotate(angle)
-        ctx.fillStyle = `rgba(${p.color.match(/\d+/g)!.map(Number)},${Math.min(1, p.opacity * lifeRatio * 1.5)})`
+        const rgbValues = p.color.match(/\d+/g)?.map(Number) ?? [255, 255, 255]
+        ctx.fillStyle = `rgba(${rgbValues},${Math.min(1, p.opacity * lifeRatio * 1.5)})`
         ctx.fillRect(-p.size/2, -p.size/4, p.size * 2, p.size/1.5)
         ctx.restore()
       }
@@ -578,7 +581,7 @@ export default function HologramImage({
       window.removeEventListener('resize', updateCanvasSize)
       cancelAnimationFrame(animationFrame)
     }
-  }, [src])
+  }, [src, enableMouseInteraction, mousePosition.x, mousePosition.y])
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -684,10 +687,11 @@ export default function HologramImage({
     >
       <div className="relative w-full">
         {/* Hidden preload image */}
-        <img
+        <Image
           src={src}
-          alt={alt}
-          ref={imageRef}
+          alt="Hologram image"
+          width={500}
+          height={300}
           className="w-full h-auto opacity-0"
           onLoad={handleImageLoad}
           onContextMenu={(e) => e.preventDefault()}
@@ -701,7 +705,7 @@ export default function HologramImage({
             onContextMenu={(e) => e.preventDefault()}
           >
             <div className="relative w-full max-h-[60vh]">
-              <img
+              <Image
                 src={src}
                 alt={alt}
                 className={`w-full h-auto max-h-[60vh] object-contain transition-opacity duration-[3000ms] mix-blend-lighten ${

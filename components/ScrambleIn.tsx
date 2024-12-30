@@ -25,7 +25,7 @@ const ScrambleIn = forwardRef<ScrambleInHandle, ScrambleInProps>(
       scrambledLetterCount = 2,
       characters = "abcdefghijklmnopqrstuvwxyz!@#$%^&*()_+",
       className = "",
-      scrambledClassName = "",
+      _scrambledClassName = "",
       autoStart = true,
       onStart,
       onComplete,
@@ -84,8 +84,8 @@ const ScrambleIn = forwardRef<ScrambleInHandle, ScrambleInProps>(
               null
             )
 
-            let node
-            while (node = walker.nextNode()) {
+            let node;
+            while ((node = walker.nextNode()) !== null) {
               textNodes.push(node)
             }
 

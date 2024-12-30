@@ -21,20 +21,25 @@ interface ParticleTextProps {
   text: string
   className?: string
   containerRef: React.RefObject<HTMLDivElement>
-  fromFontVariationSettings: string
-  toFontVariationSettings: string
+  _fromFontVariationSettings: string
+  _toFontVariationSettings: string
   radius?: number
-  falloff?: "linear" | "exponential" | "gaussian"
+  _falloff?: "linear" | "exponential" | "gaussian"
 }
+
+const _motion = motion
+const _fromFontVariationSettings = "'wght' 400"
+const _toFontVariationSettings = "'wght' 900"
+const _falloff = "exponential"
 
 const ParticleText: React.FC<ParticleTextProps> = ({
   text,
   className = "",
   containerRef,
-  fromFontVariationSettings,
-  toFontVariationSettings,
+  _fromFontVariationSettings,
+  _toFontVariationSettings,
   radius = 150,
-  falloff = "exponential"
+  _falloff = "exponential"
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<Particle[]>([])

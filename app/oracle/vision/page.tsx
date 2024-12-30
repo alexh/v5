@@ -11,7 +11,7 @@ import SmokeyBackground from '@/components/SmokeyBackground'
 export default function OracleVision() {
   const [job, setJob] = useState<MidjourneyJob | null>(null)
   const [themeColor, setThemeColor] = useState('#FF671F')
-  const { currentTheme } = useTheme()
+  const _currentTheme = useTheme()
   const [showToast, setShowToast] = useState(false)
   
   const loadRandomJob = async () => {

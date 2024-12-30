@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import { type ReactNode } from 'react'
 
 interface OracleButtonProps {
   onClick?: () => void
   href?: string
-  children: React.ReactNode
+  children: ReactNode
   color: string
   variant?: 'outline' | 'solid'
 }

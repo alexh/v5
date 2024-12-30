@@ -4,11 +4,16 @@ import React, { useState } from 'react'
 
 interface ApiTesterProps {
   endpoint: string
-  method: string
+  _method: string
 }
 
-export default function ApiTester({ endpoint, method }: ApiTesterProps) {
-  const [response, setResponse] = useState<any>(null)
+interface _ApiResponse {
+  status: number;
+  data: unknown;
+}
+
+export default function ApiTester({ endpoint, _method }: ApiTesterProps) {
+  const [response, setResponse] = useState<unknown>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -39,6 +44,10 @@ export default function ApiTester({ endpoint, method }: ApiTesterProps) {
     } finally {
       setLoading(false)
     }
+  }
+
+  const _handleSubmit = async (_method: string, _data: unknown) => {
+    // Implementation
   }
 
   return (

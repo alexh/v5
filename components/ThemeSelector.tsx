@@ -10,8 +10,8 @@ interface ThemeSelectorProps {
 }
 
 export function ThemeSelector({ initialPosition, forcePosition }: ThemeSelectorProps) {
-  const { theme, setTheme, currentTheme } = useTheme()
-  const [position, setPosition] = useState({ x: 20, y: 20 })
+  const _currentTheme = useTheme()
+  const [_position, setPosition] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
     setPosition({ x: 20, y: 20 })
@@ -24,8 +24,8 @@ export function ThemeSelector({ initialPosition, forcePosition }: ThemeSelectorP
       forcePosition={forcePosition}
     >
       <select 
-        value={theme}
-        onChange={(e) => setTheme(e.target.value)}
+        value={_currentTheme.theme}
+        onChange={(e) => _currentTheme.setTheme(e.target.value)}
         className="w-full p-2 rounded font-receipt bg-theme-primary text-theme-text border-2 border-theme-secondary"
       >
         <option value="default">Default</option>

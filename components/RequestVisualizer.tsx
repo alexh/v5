@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useCallback } from 'react'
 
 interface Particle {
   x: number
@@ -84,7 +84,7 @@ export default function RequestVisualizer({ isLoading, onComplete }: RequestVisu
     ctx.restore()
   }
 
-  const drawNode = (
+  const _drawNode = (
     ctx: CanvasRenderingContext2D, 
     x: number, 
     y: number, 
@@ -290,7 +290,72 @@ export default function RequestVisualizer({ isLoading, onComplete }: RequestVisu
   }
 
   // Separate function to render static elements
-  const renderStatic = (ctx: CanvasRenderingContext2D, pulse: number) => {
+  const renderStatic = useCallback((ctx?: CanvasRenderingContext2D, pulse = 0) => {
+    const _drawNode = (
+      ctx: CanvasRenderingContext2D, 
+      x: number, 
+      y: number, 
+      label: string, 
+      isTop: boolean,
+      pulse: number
+    ) => {
+      const width = 180
+      const height = 36
+
+      // Draw glow layers with pulse
+      if (isTop) {
+        drawNodeGlow(ctx, x, y, width, height, '#ffffff', 0.3, pulse)
+        drawNodeGlow(ctx, x, y, width, height, '#ffffff', 0.2, pulse)
+      } else {
+        drawNodeGlow(ctx, x, y, width, height, '#ffffff', 0.4, pulse)
+        drawNodeGlow(ctx, x, y, width, height, '#ffffff', 0.3, pulse)
+      }
+
+      // Draw main rectangle with gradient
+      const gradient = ctx.createLinearGradient(
+        x - width/2, y, x + width/2, y
+      )
+      
+      if (isTop) {
+        gradient.addColorStop(0, '#1a1a1a')
+        gradient.addColorStop(1, '#000000')
+      } else {
+        gradient.addColorStop(0, '#ffffff')
+        gradient.addColorStop(1, '#f0f0f0')
+      }
+
+      ctx.fillStyle = gradient
+      ctx.beginPath()
+      ctx.roundRect(x - width/2, y - height/2, width, height, 4)
+      ctx.fill()
+
+      // Add subtle border with glow
+      ctx.strokeStyle = isTop ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)'
+      ctx.lineWidth = 1
+      ctx.stroke()
+
+      // Draw text with enhanced contrast
+      ctx.font = '13px receipt-narrow, sans-serif'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      
+      if (isTop) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.95)'
+      } else {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.9)'
+      }
+      
+      ctx.fillText(label, x, y)
+    }
+
+    if (!ctx) {
+      const canvas = canvasRef.current
+      if (!canvas) return
+      const context = canvas.getContext('2d')
+      if (!context) return
+      ctx = context
+    }
+
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
     
     // Draw connecting line between fixed positions
@@ -307,12 +372,12 @@ export default function RequestVisualizer({ isLoading, onComplete }: RequestVisu
     })
     
     // Draw nodes at fixed positions
-    drawNode(ctx, 90, BOTTOM_NODE_Y, 'alexhaynes.org', false, pulse)
-    drawNode(ctx, 90, TOP_NODE_Y, 'api.materials.nyc', true, pulse)
+    _drawNode(ctx, 90, BOTTOM_NODE_Y, 'alexhaynes.org', false, pulse)
+    _drawNode(ctx, 90, TOP_NODE_Y, 'api.materials.nyc', true, pulse)
     
     // Draw status ping
     drawStatusPing(ctx, statusPingRef.current)
-  }
+  }, [])
 
   // Effect for static elements and status ping animation
   useEffect(() => {
@@ -400,7 +465,7 @@ export default function RequestVisualizer({ isLoading, onComplete }: RequestVisu
       window.removeEventListener('resize', handleResize)
       cancelAnimationFrame(animationFrameId)
     }
-  }, [])
+  }, [renderStatic, isLoading, onComplete])
 
   // Animation effect
   useEffect(() => {
@@ -504,7 +569,7 @@ export default function RequestVisualizer({ isLoading, onComplete }: RequestVisu
       draw()
     } else {
       isAnimatingRef.current = false
-      renderStatic(ctx, pulseRef.current)
+      renderStatic()
     }
 
     return () => {
@@ -512,7 +577,12 @@ export default function RequestVisualizer({ isLoading, onComplete }: RequestVisu
         cancelAnimationFrame(animationRef.current)
       }
     }
-  }, [isLoading, onComplete])
+  }, [isLoading, onComplete, renderStatic])
+
+  useEffect(() => {
+    if (!renderStatic) return
+    renderStatic()
+  }, [renderStatic])
 
   return (
     <div className="absolute left-32 top-[-40px] w-[300px] h-[800px]">

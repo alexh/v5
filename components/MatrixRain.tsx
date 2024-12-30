@@ -43,7 +43,7 @@ const MatrixRain = () => {
     if (!ctx || !englishCtx) return
 
     // Helper function to darken a color
-    const getDarkenedColor = (color: string, factor: number = 0.15) => {
+    const getDarkenedColor = (color: string, factor = 0.15) => {
       const r = parseInt(color.slice(1, 3), 16)
       const g = parseInt(color.slice(3, 5), 16)
       const b = parseInt(color.slice(5, 7), 16)
@@ -193,7 +193,7 @@ const MatrixRain = () => {
             ctx.shadowBlur = 15
             ctx.fillStyle = baseColor
             
-            let displayChar = mutateChar(japaneseChar)
+            const displayChar = mutateChar(japaneseChar)
             ctx.fillText(displayChar, i * (fontSize/2), drops[i] * fontSize) // Halved the x-position spacing
             ctx.shadowBlur = 0
 

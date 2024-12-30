@@ -1,4 +1,6 @@
 declare module "*.json" {
-    const value: any;
-    export default value;
-} 
+  const value: unknown;
+  export default value;
+}
+
+type ConfigValue = string | number | boolean | null;

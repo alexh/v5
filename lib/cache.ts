@@ -1,14 +1,12 @@
-import { LRUCache } from 'lru-cache'
+import { type LRUCache as _LRUCache } from "lru-cache";
 
-const cache = new LRUCache<string, any>({
-  max: 500, // Maximum number of items
-  ttl: 1000 * 60 * 5, // 5 minutes
-})
-
-export function getCachedResponse(key: string) {
-  return cache.get(key)
+interface CacheItem<T> {
+  value: T;
+  timestamp: number;
 }
 
-export function setCachedResponse(key: string, value: any) {
-  cache.set(key, value)
-} 
+export const cache = new Map<string, CacheItem<unknown>>();
+
+export function setCachedResponse<T>(key: string, value: T): void {
+  cache.set(key, { value, timestamp: Date.now() });
+}

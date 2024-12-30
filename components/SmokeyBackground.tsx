@@ -85,7 +85,7 @@ const SmokeyBackground = ({
       return `rgba(${r}, ${g}, ${b}, ${alpha})`
     }
 
-    const isNearText = (x: number, y: number, padding: number = 100) => {  // Increased padding
+    const isNearText = (x: number, y: number, padding = 100) => {  // Increased padding
       return textNodesRef.current.some(rect => {
         return x >= rect.left - padding &&
                x <= rect.right + padding &&

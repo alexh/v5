@@ -16,6 +16,8 @@ export default function OracleVision({
   const [themeColor, setThemeColor] = useState('#FF671F')
   const [showToast, setShowToast] = useState(false)
   
+  const _useTheme = useTheme
+
   const loadJob = async (id: string) => {
     try {
       setJob(null)

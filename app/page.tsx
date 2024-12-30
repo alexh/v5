@@ -12,9 +12,10 @@ import ElevenLabsWidget from '../components/ElevenLabsWidget'
 import ScrambleIn from '../components/ScrambleIn'
 import { ScrambleInHandle } from '../components/ScrambleIn'
 import ParticleText from '../components/ParticleText'
+import Link from 'next/link'
 
 export default function Home() {
-  const { currentTheme } = useTheme()
+  const _currentTheme = useTheme()
   const containerRef = useRef<HTMLDivElement>(null)
   const scrambleRefs = useRef<(ScrambleInHandle | null)[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -109,9 +110,9 @@ export default function Home() {
           </h2>
 
           <div className="flex flex-wrap justify-center items-center gap-4 mb-8 z-30 relative">
-            <a href="/oracle" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
+            <Link href="/oracle" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt-narrow text-lg px-4 py-2 rounded-lg">Oracle</button>
-            </a>
+            </Link>
             <a href="/api" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt-narrow text-lg px-4 py-2 rounded-lg">API</button>
             </a>

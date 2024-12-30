@@ -1,29 +1,29 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss";
+import _plugin from "tailwindcss/plugin";
+import scrollbarHide from "tailwind-scrollbar-hide";
 
 const config: Config = {
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       fontFamily: {
-        'receipt': ['"receipt-narrow"', 'sans-serif'],
-        'forma': ['"forma-djr-display"', 'sans-serif'],
+        receipt: ['"receipt-narrow"', "sans-serif"],
+        forma: ['"forma-djr-display"', "sans-serif"],
       },
       colors: {
         theme: {
-          primary: 'var(--theme-primary)',
-          secondary: 'var(--theme-secondary)',
-          text: 'var(--theme-text)',
-          background: 'var(--theme-background)',
+          primary: "var(--theme-primary)",
+          secondary: "var(--theme-secondary)",
+          text: "var(--theme-text)",
+          background: "var(--theme-background)",
         },
       },
     },
   },
-  plugins: [
-    require('tailwind-scrollbar-hide'),
-  ],
-}
-export default config 
+  plugins: [scrollbarHide],
+};
+export default config;

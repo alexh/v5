@@ -143,10 +143,22 @@ export const FloatingElement = ({
   const context = useContext(FloatingContext)
 
   useEffect(() => {
-    if (!elementRef.current || !context) return
-    context.registerElement(idRef.current, elementRef.current, depth)
-    return () => context.unregisterElement(idRef.current)
+    const currentId = idRef.current
+    const currentContext = context
+    if (!elementRef.current || !currentContext) return
+    
+    currentContext.registerElement(currentId, elementRef.current, depth)
+    return () => currentContext.unregisterElement(currentId)
   }, [depth, context])
+
+  useEffect(() => {
+    const currentId = idRef.current
+    return () => {
+      if (currentId) {
+        delete floatingElements[currentId]
+      }
+    }
+  }, [])
 
   return (
     <div
