@@ -101,6 +101,7 @@ export async function POST(request: NextRequest) {
       data = JSON.parse(responseText);
     } catch (parseError) {
       console.error("Failed to parse API response as JSON:", responseText);
+      console.error(parseError);
       return NextResponse.json(
         { error: "Invalid JSON response from API", raw: responseText },
         { status: 500 }

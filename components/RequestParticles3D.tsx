@@ -28,12 +28,15 @@ export default function RequestParticles3D({ isLoading, onComplete }: RequestPar
   useEffect(() => {
     if (!containerRef.current) return
 
+    // Store references to DOM elements at effect initialization time
+    const container = containerRef.current
+    
     const scene = new THREE.Scene()
     sceneRef.current = scene
 
     const camera = new THREE.PerspectiveCamera(
       30,
-      containerRef.current.clientWidth / containerRef.current.clientHeight,
+      container.clientWidth / container.clientHeight,
       0.1,
       1000
     )
@@ -46,8 +49,8 @@ export default function RequestParticles3D({ isLoading, onComplete }: RequestPar
       antialias: true
     })
     renderer.setPixelRatio(window.devicePixelRatio)
-    renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight)
-    containerRef.current.appendChild(renderer.domElement)
+    renderer.setSize(container.clientWidth, container.clientHeight)
+    container.appendChild(renderer.domElement)
     rendererRef.current = renderer
 
     // Create a group to hold both the globe and base sphere
@@ -133,7 +136,7 @@ export default function RequestParticles3D({ isLoading, onComplete }: RequestPar
         const labelDiv = document.createElement('div')
         labelDiv.className = 'absolute text-[#7FDBFF] text-lg font-mono bg-black/50 px-3 py-1.5 rounded whitespace-nowrap'
         labelDiv.textContent = 'api.materials.nyc'
-        containerRef.current?.appendChild(labelDiv)
+        container.appendChild(labelDiv)
 
         // Apply wireframe to continents
         globe.traverse((child) => {
@@ -186,12 +189,12 @@ export default function RequestParticles3D({ isLoading, onComplete }: RequestPar
 
         // Only update label position
         const updateLabel = () => {
-          if (containerRef.current) {
+          if (container) {
             const labelPos = lineEnd.clone()
             labelPos.project(camera)
             
-            const x = (labelPos.x * 0.5 + 0.5) * containerRef.current.clientWidth
-            const y = (-labelPos.y * 0.5 + 0.5) * containerRef.current.clientHeight
+            const x = (labelPos.x * 0.5 + 0.5) * container.clientWidth
+            const y = (-labelPos.y * 0.5 + 0.5) * container.clientHeight
             
             labelDiv.style.transform = `translate(-50%, -50%)`
             labelDiv.style.left = `${x}px`
@@ -208,10 +211,10 @@ export default function RequestParticles3D({ isLoading, onComplete }: RequestPar
 
     // Handle resize
     const handleResize = () => {
-      if (!containerRef.current || !cameraRef.current || !rendererRef.current) return
+      if (!container || !cameraRef.current || !rendererRef.current) return
       
-      const width = containerRef.current.clientWidth
-      const height = containerRef.current.clientHeight
+      const width = container.clientWidth
+      const height = container.clientHeight
       
       cameraRef.current.aspect = width / height
       cameraRef.current.updateProjectionMatrix()
@@ -226,11 +229,12 @@ export default function RequestParticles3D({ isLoading, onComplete }: RequestPar
       if (frameIdRef.current) {
         cancelAnimationFrame(frameIdRef.current)
       }
-      if (rendererRef.current && containerRef.current) {
-        containerRef.current.removeChild(renderer.domElement)
+      // Use the stored container reference instead of current ref
+      if (rendererRef.current && container) {
+        container.removeChild(rendererRef.current.domElement)
       }
     }
-  }, [])
+  }, [cameraX, cameraY, cameraZ, rotationX, rotationY, scale])
 
   useEffect(() => {
     if (!isLoading && frameIdRef.current) {

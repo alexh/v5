@@ -55,7 +55,7 @@ export default function ChatInterface() {
     
     try {
       // Prepare request body
-      const requestBody: Record<string, any> = {
+      const requestBody: Record<string, string> = {
         message: inputMessage
       }
       

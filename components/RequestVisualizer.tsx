@@ -7,9 +7,8 @@ interface RequestVisualizerProps {
   onComplete: () => void
 }
 
-export default function RequestVisualizer({ isLoading, onComplete }: RequestVisualizerProps) {
+export default function RequestVisualizer({ isLoading }: RequestVisualizerProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const particlesRef = useRef<HTMLDivElement[]>([])
   const animationFrameRef = useRef<number>()
 
   useEffect(() => {
@@ -18,6 +17,9 @@ export default function RequestVisualizer({ isLoading, onComplete }: RequestVisu
     const container = containerRef.current
     const nycX = container.offsetWidth * 0.6  // Adjust based on globe position
     const nycY = container.offsetHeight * 0.4  // Adjust based on globe position
+
+    // Store current animation frame ref value at effect run time
+    const animationFrameId = animationFrameRef.current
 
     const createParticle = () => {
       const particle = document.createElement('div')
@@ -51,8 +53,9 @@ export default function RequestVisualizer({ isLoading, onComplete }: RequestVisu
 
     return () => {
       clearInterval(interval)
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current)
+      // Use the captured value instead of reading current ref
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId)
       }
     }
   }, [isLoading])
