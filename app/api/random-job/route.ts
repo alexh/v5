@@ -28,7 +28,7 @@ export async function GET() {
     return NextResponse.json(
       {
         error: "Failed to fetch random job",
-        details: error?.message || "Unknown error",
+        details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
     );

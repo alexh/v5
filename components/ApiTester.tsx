@@ -13,7 +13,7 @@ interface _ApiResponse {
 }
 
 export default function ApiTester({ endpoint, _method }: ApiTesterProps) {
-  const [response, setResponse] = useState<unknown>(null)
+  const [response, setResponse] = useState<Record<string, unknown> | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -37,7 +37,7 @@ export default function ApiTester({ endpoint, _method }: ApiTesterProps) {
         throw new Error(data.error || 'Request failed')
       }
       
-      setResponse(data)
+      setResponse(data as Record<string, unknown>)
     } catch (err) {
       console.error('API Test Error:', err)
       setError(err instanceof Error ? err.message : 'An error occurred')

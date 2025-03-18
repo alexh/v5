@@ -6,7 +6,6 @@ interface ScrambleInProps {
   scrambledLetterCount?: number
   characters?: string
   className?: string
-  scrambledClassName?: string
   autoStart?: boolean
   onStart?: () => void
   onComplete?: () => void
@@ -25,7 +24,6 @@ const ScrambleIn = forwardRef<ScrambleInHandle, ScrambleInProps>(
       scrambledLetterCount = 2,
       characters = "abcdefghijklmnopqrstuvwxyz!@#$%^&*()_+",
       className = "",
-      _scrambledClassName = "",
       autoStart = true,
       onStart,
       onComplete,

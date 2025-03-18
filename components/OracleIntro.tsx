@@ -137,12 +137,13 @@ export default function OracleIntro() {
     const position = getRandomPosition()
     
     const img = createImage()
+    if (!job) return
     img.src = `/midjourney/images/${job.id}.png`
     
     const newVision: Vision = {
-      id: job.id,
-      prompt: job.prompt,
-      url: job.url,
+      id: job.id as string,
+      prompt: job.prompt as string,
+      url: job.url as string,
       x: (Math.random() - 0.5) * 20,
       y: (Math.random() - 0.5) * 20,
       scale: 0.8 + Math.random() * 0.4,

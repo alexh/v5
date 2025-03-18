@@ -382,14 +382,21 @@ function Scene({ wireframe, modelPath, config, onStatsCalculated }: {
   )
 }
 
+const defaultConfig: ModelConfig = {
+  scale: 1.0,
+  position: [0, 0, 0],
+  cameraPosition: [3, 0, 3],
+  fov: 50
+}
+
 export default function JacketViewer() {
   const [selectedItem, setSelectedItem] = useState(ITEMS[0])
   const [wireframe, setWireframe] = useState(true)
-  const [config, setConfig] = useState<ModelConfig>(selectedItem.config ?? ITEMS[0].config)
+  const [config, setConfig] = useState<ModelConfig>(selectedItem.config ?? ITEMS[0].config ?? defaultConfig)
   const [modelStats, setModelStats] = useState<ModelStats | null>(null)
 
   useEffect(() => {
-    setConfig(selectedItem.config ?? ITEMS[0].config)
+    setConfig(selectedItem.config ?? ITEMS[0].config ?? defaultConfig)
   }, [selectedItem])
 
   return (

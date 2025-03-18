@@ -225,7 +225,7 @@ export default function HologramImage({
         particlesRef.current = []
         meltingParticlesRef.current = [] // Clear melting particles
 
-        const img = new Image()
+        const img = new (Image as unknown as { new(width?: number, height?: number): HTMLImageElement })(0)
         
         await new Promise<void>((resolve, reject) => {
           img.onload = () => {

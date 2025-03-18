@@ -97,10 +97,10 @@ export default function Home() {
             <ParticleText
               text="Alex Haynes"
               className="text-6xl font-extrabold text-center tracking-[.02em] text-theme-text font-['forma-djr-banner'] whitespace-nowrap"
-              fromFontVariationSettings="'wght' 400"
-              toFontVariationSettings="'wght' 900"
+              _fromFontVariationSettings="'wght' 400"
+              _toFontVariationSettings="'wght' 900"
               radius={150}
-              falloff="exponential"
+              _falloff="exponential"
               containerRef={containerRef}
             />
           </div>
@@ -148,7 +148,6 @@ export default function Home() {
                     scrambledLetterCount={15}
                     autoStart={false}
                     className="text-theme-text relative"
-                    scrambledClassName="text-theme-secondary"
                     onComplete={() => {
                       if (index < paragraphs.length - 1) {
                         scrambleRefs.current[index + 1]?.start();
