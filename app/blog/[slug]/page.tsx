@@ -184,27 +184,27 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   const mdxComponents = {
-    h1: ({ children }: { children: React.ReactNode }) => (
+    h1: ({ children }: { children?: React.ReactNode }) => (
       <h1 className="text-4xl font-bold mb-6 font-forma text-theme-text">
         {children}
       </h1>
     ),
-    h2: ({ children }: { children: React.ReactNode }) => (
+    h2: ({ children }: { children?: React.ReactNode }) => (
       <h2 className="text-3xl font-semibold mb-4 mt-8 font-forma text-theme-text">
         {children}
       </h2>
     ),
-    h3: ({ children }: { children: React.ReactNode }) => (
+    h3: ({ children }: { children?: React.ReactNode }) => (
       <h3 className="text-2xl font-medium mb-3 mt-6 font-forma text-theme-text">
         {children}
       </h3>
     ),
-    p: ({ children }: { children: React.ReactNode }) => (
+    p: ({ children }: { children?: React.ReactNode }) => (
       <p className="text-lg mb-4 text-theme-text font-receipt-narrow leading-relaxed">
         {children}
       </p>
     ),
-    a: ({ href, children }: { href?: string; children: React.ReactNode }) => (
+    a: ({ href, children }: { href?: string; children?: React.ReactNode }) => (
       <a 
         href={href} 
         className="underline hover:text-theme-secondary transition-colors text-theme-text"
@@ -214,32 +214,32 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
         {children}
       </a>
     ),
-    ul: ({ children }: { children: React.ReactNode }) => (
+    ul: ({ children }: { children?: React.ReactNode }) => (
       <ul className="list-disc list-inside mb-4 text-theme-text font-receipt-narrow space-y-2">
         {children}
       </ul>
     ),
-    ol: ({ children }: { children: React.ReactNode }) => (
+    ol: ({ children }: { children?: React.ReactNode }) => (
       <ol className="list-decimal list-inside mb-4 text-theme-text font-receipt-narrow space-y-2">
         {children}
       </ol>
     ),
-    li: ({ children }: { children: React.ReactNode }) => (
+    li: ({ children }: { children?: React.ReactNode }) => (
       <li className="text-lg text-theme-text">
         {children}
       </li>
     ),
-    blockquote: ({ children }: { children: React.ReactNode }) => (
+    blockquote: ({ children }: { children?: React.ReactNode }) => (
       <blockquote className="border-l-4 border-theme-secondary pl-4 italic mb-4 text-theme-text font-receipt-narrow">
         {children}
       </blockquote>
     ),
-    code: ({ children }: { children: React.ReactNode }) => (
+    code: ({ children }: { children?: React.ReactNode }) => (
       <code className="bg-theme-secondary/20 px-2 py-1 rounded text-sm font-mono text-theme-text">
         {children}
       </code>
     ),
-    pre: ({ children }: { children: React.ReactNode }) => {
+    pre: ({ children }: { children?: React.ReactNode }) => {
       const codeContent = React.isValidElement(children) && children.props?.children
         ? typeof children.props.children === 'string' 
           ? children.props.children 
