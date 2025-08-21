@@ -21,6 +21,21 @@ const config: Config = {
           background: "var(--theme-background)",
         },
       },
+      animation: {
+        shimmer: "shimmer 2s ease-in-out infinite",
+        "shimmer-sweep": "shimmer-sweep 1.5s ease-in-out infinite",
+      },
+      keyframes: {
+        shimmer: {
+          "0%": { transform: "translateX(-100%) rotate(12deg)" },
+          "100%": { transform: "translateX(300%) rotate(12deg)" },
+        },
+        "shimmer-sweep": {
+          "0%": { transform: "translateX(-150%) skewX(12deg)" },
+          "50%": { transform: "translateX(-50%) skewX(12deg)" },
+          "100%": { transform: "translateX(150%) skewX(12deg)" },
+        },
+      },
     },
   },
 };

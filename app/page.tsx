@@ -110,6 +110,9 @@ export default function Home() {
           </h2>
 
           <div className="flex flex-wrap justify-center items-center gap-4 mb-8 z-30 relative">
+            <Link href="/blog" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
+              <button className="font-receipt-narrow text-lg px-4 py-2 rounded-lg">Blog</button>
+            </Link>
             <Link href="/oracle" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt-narrow text-lg px-4 py-2 rounded-lg">Generative AI Art</button>
             </Link>
