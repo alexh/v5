@@ -2,7 +2,6 @@
 
 import React, { useRef, useEffect, useState } from 'react'
 import Link from 'next/link'
-import { useTheme } from '../../../../contexts/ThemeContext'
 import SmokeyBackground from '../../../../components/SmokeyBackground'
 import SnowEffect from '../../../../components/SnowEffect'
 import CrtGrid from '../../../../components/CrtGrid'
@@ -89,7 +88,7 @@ export default function TagPage({ params }: TagPageProps) {
           </h1>
           
           <p className="text-lg text-theme-text/80 text-center mb-8 font-receipt-narrow">
-            {posts.length} post{posts.length !== 1 ? 's' : ''} tagged with "{decodedTag}"
+            {posts.length} post{posts.length !== 1 ? 's' : ''} tagged with &ldquo;{decodedTag}&rdquo;
           </p>
           
           <div className="mb-8 text-center">
@@ -114,7 +113,7 @@ export default function TagPage({ params }: TagPageProps) {
               </div>
             ) : (
               <div className="grid gap-8">
-                {posts.map((post, index) => (
+                {posts.map((post) => (
                   <Link key={post.slug} href={`/blog/${post.slug}`}>
                     <article className="group relative rounded-lg p-6 bg-theme-primary/50 backdrop-blur-sm cursor-pointer transition-all duration-300 border-2 border-transparent hover:border-theme-secondary hover:shadow-xl hover:shadow-theme-secondary/60">
                       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-3">

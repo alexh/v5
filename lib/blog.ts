@@ -103,7 +103,7 @@ export function getAdjacentPosts(currentSlug: string): { prev: BlogPost | null, 
   }
 }
 
-export function getRelatedPosts(currentSlug: string, limit: number = 3): BlogPost[] {
+export function getRelatedPosts(currentSlug: string, limit = 3): BlogPost[] {
   const allPosts = getBlogPosts()
   const currentPost = allPosts.find(post => post.slug === currentSlug)
   

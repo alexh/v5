@@ -2,7 +2,6 @@
 
 import React, { useRef, useEffect, useState } from 'react'
 import Link from 'next/link'
-import { useTheme } from '../../contexts/ThemeContext'
 import SmokeyBackground from '../../components/SmokeyBackground'
 import SnowEffect from '../../components/SnowEffect'
 import CrtGrid from '../../components/CrtGrid'
@@ -113,7 +112,7 @@ export default function BlogPage() {
               </div>
             ) : (
               <div className="grid gap-8">
-                {filteredPosts.map((post, index) => (
+                {filteredPosts.map((post) => (
                   <Link key={post.slug} href={`/blog/${post.slug}`}>
                     <article className="group relative rounded-lg p-6 bg-theme-primary/50 backdrop-blur-sm cursor-pointer transition-all duration-300 border-2 border-transparent hover:border-theme-secondary hover:shadow-xl hover:shadow-theme-secondary/60">
                       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-3">
