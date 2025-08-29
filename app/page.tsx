@@ -131,6 +131,9 @@ export default function Home() {
             <a href="https://www.github.com/alexh" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt-narrow text-lg px-4 py-2 rounded-lg">GitHub</button>
             </a>
+            <a href="https://alexh.github.io/vintage-icons/" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
+              <button className="font-receipt-narrow text-lg px-4 py-2 rounded-lg">Vintage Icons</button>
+            </a>
             <a href="mailto:alex@alexhaynes.org" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt-narrow text-lg px-4 py-2 rounded-lg">Email Me</button>
             </a>
