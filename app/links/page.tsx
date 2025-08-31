@@ -100,7 +100,7 @@ export default function LinksPage() {
   }
 
   return (
-    <main className="h-screen overflow-hidden p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative" ref={containerRef}>
+    <main className="min-h-screen p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative" ref={containerRef}>
       <CrtGrid />
       <SnowEffect />
       
@@ -114,8 +114,8 @@ export default function LinksPage() {
 
       <ElevenLabsWidget />
 
-      <div className="h-full max-w-3xl mx-auto relative z-20">
-        <div className="h-full flex flex-col">
+      <div className="max-w-3xl mx-auto relative z-20">
+        <div className="flex flex-col">
           <div className="pt-8 flex justify-center z-30 relative">
             <ParticleText
               text="Links"
@@ -138,9 +138,9 @@ export default function LinksPage() {
             </Link>
           </div>
 
-          <div className="relative flex-1 min-h-0">
+          <div className="relative">
             <SmokeyBackground targetSelector=".links-content" zIndex={10} />
-            <div className="absolute inset-0 links-content">
+            <div className="links-content">
               <div className="space-y-8 text-lg text-theme-text relative z-20">
                 {links.map((link, index) => (
                   <ScrambleIn
