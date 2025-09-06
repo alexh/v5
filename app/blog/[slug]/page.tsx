@@ -16,6 +16,7 @@ import CopyButton from '../../../components/CopyButton'
 import PostNavigation from '../../../components/PostNavigation'
 import RelatedPosts from '../../../components/RelatedPosts'
 import ReadingProgress from '../../../components/ReadingProgress'
+import BlogJsonLd from '../../../components/BlogJsonLd'
 
 interface BlogPost {
   slug: string
@@ -261,6 +262,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <>
+      <BlogJsonLd post={post} />
       <ReadingProgress />
       <main className="min-h-screen p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative" ref={containerRef}>
       <CrtGrid />

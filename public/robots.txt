@@ -1,0 +1,11 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+
+# Host
+Host: https://alexhaynes.org
+
+# Sitemaps
+Sitemap: https://alexhaynes.org/sitemap.xml
