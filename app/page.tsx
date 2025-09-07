@@ -62,7 +62,7 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <main className="h-screen overflow-hidden p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative">
+      <main className="h-screen md:overflow-hidden overflow-auto p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative">
         <CrtGrid />
         <div className="absolute inset-0 z-10">
           <SmokeyBackground targetSelector=".loading-text" zIndex={1} />
@@ -77,7 +77,7 @@ export default function Home() {
   }
 
   return (
-    <main className="h-screen overflow-hidden p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative" ref={containerRef}>
+    <main className="min-h-screen md:h-screen md:overflow-hidden overflow-x-hidden overflow-y-auto p-[5%] pb-[40px] md:pb-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative" ref={containerRef}>
       <CrtGrid />
       <SnowEffect />
       
@@ -91,12 +91,12 @@ export default function Home() {
 
       <ElevenLabsWidget />
 
-      <div className="h-full max-w-3xl mx-auto relative z-20">
-        <div className="h-full flex flex-col">
+      <div className="h-full md:h-full max-w-3xl mx-auto relative z-20">
+        <div className="h-full md:h-full flex flex-col">
           <div className="pt-8 flex justify-center z-30 relative">
             <ParticleText
               text="Alex Haynes"
-              className="text-6xl font-extrabold text-center tracking-[.02em] text-theme-text font-['forma-djr-banner'] whitespace-nowrap"
+              className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-center tracking-[.02em] text-theme-text font-['forma-djr-banner'] whitespace-nowrap"
               _fromFontVariationSettings="'wght' 400"
               _toFontVariationSettings="'wght' 900"
               radius={150}
@@ -105,7 +105,7 @@ export default function Home() {
             />
           </div>
           
-          <h2 className="text-3xl text-center font-forma text-theme-text z-30 relative mb-4">
+          <h2 className="text-xl sm:text-2xl md:text-3xl text-center font-forma text-theme-text z-30 relative mb-4 px-4">
             Software Engineer | Creative
           </h2>
 
@@ -142,9 +142,9 @@ export default function Home() {
             </a>
           </div>
 
-          <div className="relative flex-1 min-h-0">
+          <div className="relative flex-1 md:min-h-0">
             <SmokeyBackground targetSelector=".text-content" zIndex={10} />
-            <div className="absolute inset-0 text-content">
+            <div className="md:absolute md:inset-0 text-content">
               <div className="space-y-8 text-lg text-theme-text relative z-20">
                 {paragraphs.map((text, index) => (
                   <ScrambleIn
@@ -168,11 +168,11 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="block md:hidden mt-auto">
+          <div className="block md:hidden mt-8 mb-8 relative z-30">
             <InlineThemeSelector />
           </div>
 
-          <footer className="text-center text-theme-text font-receipt-narrow mt-6 md:mt-8">
+          <footer className="text-center text-theme-text font-receipt-narrow mt-6 md:mt-8 relative z-20">
             © {new Date().getFullYear()}, Built with love ❤️
           </footer>
         </div>
