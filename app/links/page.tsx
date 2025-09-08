@@ -24,27 +24,38 @@ export default function LinksPage() {
     {
       name: "Utility Materials Inc",
       url: "utility.materials.nyc",
-      fullUrl: "https://utility.materials.nyc"
+      fullUrl: "https://utility.materials.nyc",
+      description: "Clothing Brand"
     },
     {
       name: "VIA Terminal",
       url: "via.terminalis.sh",
-      fullUrl: "https://via.terminalis.sh"
+      fullUrl: "https://via.terminalis.sh",
+      description: "iOS Terminal App"
     },
     {
       name: "Shopalytics",
       url: "shopalytics.ai",
-      fullUrl: "https://shopalytics.ai"
+      fullUrl: "https://shopalytics.ai",
+      description: "Shopify Analytics Conversational Platform"
+    },
+    {
+      name: "From the River to the Sea",
+      url: "from.the.river.to.the.sea.giving",
+      fullUrl: "https://from.the.river.to.the.sea.giving",
+      description: "Gazan Genocide Awareness Page"
     },
     {
       name: "Materials Corporation",
       url: "materials.nyc",
-      fullUrl: "https://materials.nyc"
+      fullUrl: "https://materials.nyc",
+      description: "Holding Company"
     },
     {
-      name: "Creative Tools",
+      name: "Utility Tools",
       url: "tools.materials.nyc",
-      fullUrl: "https://tools.materials.nyc"
+      fullUrl: "https://tools.materials.nyc",
+      description: "macOS Apps for Creatives"
     }
   ]
 
@@ -149,8 +160,13 @@ export default function LinksPage() {
                       scrambleRefs.current[index] = el
                     }}
                     text={`<a href="${link.fullUrl}" class="block p-6 border border-theme-text/20 rounded-lg hover:border-theme-secondary transition-colors pointer-events-auto cursor-pointer">
-                      <div class="text-2xl font-bold mb-2 text-theme-text">${link.name}</div>
-                      <div class="text-theme-text/80">${link.url}</div>
+                      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                        <div>
+                          <div class="text-2xl font-bold text-theme-text">${link.name}</div>
+                          <div class="text-theme-text/60 text-sm mt-1">${link.description}</div>
+                        </div>
+                        <div class="text-theme-text/80 md:text-right text-sm md:text-base">${link.url}</div>
+                      </div>
                     </a>`}
                     scrambleSpeed={1}
                     scrambledLetterCount={15}
