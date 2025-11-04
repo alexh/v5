@@ -75,6 +75,17 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="stylesheet" href="https://use.typekit.net/qzy8qpi.css" />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-8BDD7C0K90"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-8BDD7C0K90');
+            `,
+          }}
+        />
       </head>
       <body className={inter.className}>
         <ThemeProvider>
