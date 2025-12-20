@@ -22,7 +22,7 @@ export default function Home() {
   const paragraphs = [
     "I am a software engineer living in New York City, USA.",
     `As a Senior Full Stack Engineer at <a href="https://seek.ai" class="underline hover:text-theme-secondary transition-colors pointer-events-auto">Seek AI</a>, I build features end-to-end across the entire stack. My work spans from crafting intuitive front-end experiences to designing robust backend systems and implementing sophisticated prompt engineering solutions. I specialize in developing distributed systems and handling complex async job processing pipelines. Prior to Seek, I spent four years at Two Sigma Insurance Quantified, where I gained valuable experience in enterprise software development.`,
-    `Outside of work, I make full use of my down time - whether skiing, exploring new places, spending time with my dog, <a href="https://www.instagram.com/bolognaboynyc" class="underline hover:text-theme-secondary transition-colors pointer-events-auto cursor-pointer">Bologna</a>, or building and designing for my clothing brand, <a href="https://utility.materials.nyc" class="underline hover:text-theme-secondary transition-colors pointer-events-auto cursor-pointer">Utility Materials, Inc.</a> Additionally, I'm developing a rogue-like platform fighting game.`
+    `Outside of work, I make full use of my down time - whether skiing, exploring new places, spending time with my dog, <a href="https://www.instagram.com/bolognaboynyc" class="underline hover:text-theme-secondary transition-colors pointer-events-auto cursor-pointer">Bologna</a>, or building and designing for my clothing brand, <a href="https://utility.materials.nyc" class="underline hover:text-theme-secondary transition-colors pointer-events-auto cursor-pointer">Utility Materials, Inc.</a> Additionally, I'm developing a <a href="https://digital.materials.nyc/this-god-is-not-final" class="underline hover:text-theme-secondary transition-colors pointer-events-auto cursor-pointer">rogue-like platform fighting game</a>.`
   ]
 
   useEffect(() => {
@@ -142,10 +142,10 @@ export default function Home() {
             </a>
           </div>
 
-          <div className="relative flex-1 md:min-h-0">
+          <div className="relative flex-1 md:min-h-0 mb-8 md:mb-0">
             <SmokeyBackground targetSelector=".text-content" zIndex={10} />
-            <div className="md:absolute md:inset-0 text-content">
-              <div className="space-y-8 text-lg text-theme-text relative z-20">
+            <div className="md:absolute md:inset-0 text-content md:overflow-y-auto md:pb-20">
+              <div className="space-y-8 text-lg text-theme-text relative z-20 pb-4 md:pb-0">
                 {paragraphs.map((text, index) => (
                   <ScrambleIn
                     key={index}
