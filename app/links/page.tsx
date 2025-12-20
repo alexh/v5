@@ -28,6 +28,12 @@ export default function LinksPage() {
       description: "Clothing Brand"
     },
     {
+      name: "Digital Materials",
+      url: "digital.materials.nyc",
+      fullUrl: "https://digital.materials.nyc",
+      description: "Game Studio subsidiary of Utility Materials.<br />Currently building a rogue-like platform fighter."
+    },
+    {
       name: "VIA Terminal",
       url: "via.terminalis.sh",
       fullUrl: "https://via.terminalis.sh",

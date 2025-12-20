@@ -77,7 +77,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen md:h-screen md:overflow-hidden overflow-x-hidden overflow-y-auto p-[5%] pb-[40px] md:pb-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative" ref={containerRef}>
+    <main className="min-h-screen overflow-x-hidden overflow-y-auto p-[5%] pb-[40px] md:pb-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative" ref={containerRef}>
       <CrtGrid />
       <SnowEffect />
       
@@ -91,8 +91,8 @@ export default function Home() {
 
       <ElevenLabsWidget />
 
-      <div className="h-full md:h-full max-w-3xl mx-auto relative z-20">
-        <div className="h-full md:h-full flex flex-col">
+      <div className="max-w-3xl mx-auto relative z-20">
+        <div className="flex flex-col">
           <div className="pt-8 flex justify-center z-30 relative">
             <ParticleText
               text="Alex Haynes"
@@ -142,10 +142,10 @@ export default function Home() {
             </a>
           </div>
 
-          <div className="relative flex-1 md:min-h-0 mb-8 md:mb-0">
+          <div className="relative mb-8">
             <SmokeyBackground targetSelector=".text-content" zIndex={10} />
-            <div className="md:absolute md:inset-0 text-content md:overflow-y-auto md:pb-20">
-              <div className="space-y-8 text-lg text-theme-text relative z-20 pb-4 md:pb-0">
+            <div className="text-content">
+              <div className="space-y-8 text-lg text-theme-text relative z-20">
                 {paragraphs.map((text, index) => (
                   <ScrambleIn
                     key={index}
@@ -168,7 +168,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="block md:hidden mt-8 mb-8 relative z-30">
+          <div className="block md:hidden mb-8 relative z-30">
             <InlineThemeSelector />
           </div>
 
