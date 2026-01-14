@@ -122,9 +122,6 @@ export default function Home() {
             <Link href="/links" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt-narrow text-lg px-4 py-2 rounded-lg">Links</button>
             </Link>
-            <a href="/api" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
-              <button className="font-receipt-narrow text-lg px-4 py-2 rounded-lg">API</button>
-            </a>
             <a href="/clothing-design" className="hover:scale-105 transition-transform pointer-events-auto cursor-pointer">
               <button className="font-receipt-narrow text-lg px-4 py-2 rounded-lg">Clothing Design</button>
             </a>
