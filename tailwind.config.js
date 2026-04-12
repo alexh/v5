@@ -11,6 +11,7 @@ module.exports = {
         'receipt': ['Receipt', 'monospace'],
         'receipt-narrow': ['receipt-narrow', 'sans-serif'],
         'nickel': ['Nickel', 'sans-serif'],
+        'monaspace-krypton': ['"Monaspace Krypton"', 'ui-monospace', 'monospace'],
       },
       colors: {
         'theme-primary': 'var(--theme-primary)',

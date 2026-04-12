@@ -12,6 +12,7 @@ const config: Config = {
       fontFamily: {
         receipt: ['"receipt-narrow"', "sans-serif"],
         forma: ['"forma-djr-display"', "sans-serif"],
+        "monaspace-krypton": ['"Monaspace Krypton"', "ui-monospace", "monospace"],
       },
       colors: {
         theme: {
@@ -19,6 +20,7 @@ const config: Config = {
           secondary: "var(--theme-secondary)",
           text: "var(--theme-text)",
           background: "var(--theme-background)",
+          accent: "var(--theme-accent)",
         },
       },
       animation: {

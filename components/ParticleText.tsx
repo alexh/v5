@@ -42,11 +42,20 @@ const ParticleText: React.FC<ParticleTextProps> = ({
   _falloff = "exponential"
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const wrapperRef = useRef<HTMLDivElement>(null)
   const particlesRef = useRef<Particle[]>([])
-  const mousePositionRef = useMousePositionRef(containerRef)
+  const mousePositionRef = useMousePositionRef(canvasRef)
   const timeRef = useRef(0)
   const { currentTheme } = useTheme()
   const [fontLoaded, setFontLoaded] = useState(false)
+  const WRAPPER_HEIGHT = 220
+  const CANVAS_HEIGHT = 600
+  const VERTICAL_OVERFLOW = (CANVAS_HEIGHT - WRAPPER_HEIGHT) / 2
+  const [canvasMetrics, setCanvasMetrics] = useState({
+    width: 800,
+    height: CANVAS_HEIGHT,
+    leftOffset: 0,
+  })
 
   useEffect(() => {
     // Wait for font to load
@@ -61,11 +70,46 @@ const ParticleText: React.FC<ParticleTextProps> = ({
   useEffect(() => {
     if (!fontLoaded) return
 
+    const update = () => {
+      const wrapper = wrapperRef.current
+      if (!wrapper) return
+      const rect = wrapper.getBoundingClientRect()
+      const visibleWidth = document.documentElement.clientWidth
+      const nextLeftOffset = Math.round(-rect.left)
+      setCanvasMetrics(prev => {
+        if (
+          prev.width === visibleWidth &&
+          prev.leftOffset === nextLeftOffset &&
+          prev.height === CANVAS_HEIGHT
+        ) {
+          return prev
+        }
+        return {
+          width: visibleWidth,
+          height: CANVAS_HEIGHT,
+          leftOffset: nextLeftOffset,
+        }
+      })
+    }
+
+    update()
+    window.addEventListener('resize', update)
+    const ro = new ResizeObserver(update)
+    ro.observe(wrapperRef.current!)
+    return () => {
+      window.removeEventListener('resize', update)
+      ro.disconnect()
+    }
+  }, [fontLoaded])
+
+  useEffect(() => {
+    if (!fontLoaded) return
+
     const canvas = canvasRef.current
     if (!canvas) return
 
-    canvas.width = 800
-    canvas.height = 100
+    canvas.width = canvasMetrics.width
+    canvas.height = canvasMetrics.height
 
     const ctx = canvas.getContext('2d')
     if (!ctx) return
@@ -120,7 +164,7 @@ const ParticleText: React.FC<ParticleTextProps> = ({
       }
     }
     particlesRef.current = particles
-  }, [text, currentTheme, fontLoaded])
+  }, [text, currentTheme, fontLoaded, canvasMetrics])
 
   useAnimationFrame(() => {
     const canvas = canvasRef.current
@@ -130,8 +174,14 @@ const ParticleText: React.FC<ParticleTextProps> = ({
     if (!ctx) return
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    
+
     timeRef.current += 0.01
+
+    const rect = canvas.getBoundingClientRect()
+    const scaleX = rect.width > 0 ? canvas.width / rect.width : 1
+    const scaleY = rect.height > 0 ? canvas.height / rect.height : 1
+    const mouseX = mousePositionRef.current.x * scaleX
+    const mouseY = mousePositionRef.current.y * scaleY
 
     particlesRef.current.forEach(particle => {
       const waveAmplitude = 6.0
@@ -144,14 +194,14 @@ const ParticleText: React.FC<ParticleTextProps> = ({
       particle.baseY = particle.initialY + verticalOffset
 
       const distance = Math.sqrt(
-        Math.pow(mousePositionRef.current.x - particle.x, 2) +
-        Math.pow(mousePositionRef.current.y - particle.y, 2)
+        Math.pow(mouseX - particle.x, 2) +
+        Math.pow(mouseY - particle.y, 2)
       )
 
       if (distance < radius) {
         const force = (1 - distance / radius) * 5
-        particle.targetX = particle.baseX + (particle.x - mousePositionRef.current.x) * force
-        particle.targetY = particle.baseY + (particle.y - mousePositionRef.current.y) * force
+        particle.targetX = particle.baseX + (particle.x - mouseX) * force
+        particle.targetY = particle.baseY + (particle.y - mouseY) * force
       } else {
         particle.targetX = particle.baseX
         particle.targetY = particle.baseY
@@ -170,11 +220,30 @@ const ParticleText: React.FC<ParticleTextProps> = ({
   }
 
   return (
-    <canvas
-      ref={canvasRef}
-      className={className}
-      style={{ mixBlendMode: 'screen' }}
-    />
+    <div
+      ref={wrapperRef}
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: `${WRAPPER_HEIGHT}px`,
+        pointerEvents: 'none',
+      }}
+    >
+      <canvas
+        ref={canvasRef}
+        className={className}
+        style={{
+          mixBlendMode: 'screen',
+          position: 'absolute',
+          left: `${canvasMetrics.leftOffset}px`,
+          top: `${-VERTICAL_OVERFLOW}px`,
+          width: `${canvasMetrics.width}px`,
+          height: `${canvasMetrics.height}px`,
+          maxWidth: 'none',
+          display: 'block',
+        }}
+      />
+    </div>
   )
 }
 

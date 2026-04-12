@@ -75,6 +75,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="stylesheet" href="https://use.typekit.net/qzy8qpi.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/monaspace-krypton/index.css" />
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-8BDD7C0K90"></script>
         <script
           dangerouslySetInnerHTML={{

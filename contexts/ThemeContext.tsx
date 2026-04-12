@@ -8,60 +8,70 @@ export const themes = {
     secondary: '#E55D1C',
     text: '#FFFFFF',
     background: '#FF671F',
+    accent: '#FFDD57',
   },
   monochrome: {
     primary: '#1A1A1A',
     secondary: '#333333',
     text: '#FFFFFF',
     background: '#000000',
+    accent: '#FF671F',
   },
   cute: {
     primary: '#FF69B4',
     secondary: '#FFB6C1',
     text: '#008db4',
     background: '#FFC0CB',
+    accent: '#FF1493',
   },
   night: {
     primary: '#1A1A1A',
     secondary: '#2C2C2C',
     text: '#FF0000',
     background: '#000000',
+    accent: '#FF4500',
   },
   forest: {
     primary: '#0f280f',
     secondary: '#b89d54',
     text: '#F0FFF0',
     background: '#013220',
+    accent: '#7CFC00',
   },
   ocean: {
     primary: '#4169E1',
     secondary: '#1E90FF',
     text: '#F0F8FF',
     background: '#00008B',
+    accent: '#00CED1',
   },
   arctic: {
     primary: '#E0FFFF',
     secondary: '#dbdbdb',
     text: '#0000FF',
     background: '#FFFFFF',
+    accent: '#1E90FF',
   },
   desert: {
     primary: '#D2691E',
     secondary: '#DEB887',
     text: '#8B4513',
     background: '#F4A460',
+    accent: '#FFD700',
   },
   neon: {
     primary: '#000000',
     secondary: '#ff33f8',
     text: '#00e5ff',
     background: '#000000',
+    accent: '#ff33f8',
   },
   cog: {
     primary: '#A9A9A9',
     secondary: '#D3D3D3',
     text: '#FFA500',
     background: '#696969',
+    accent: '#FFD700',
   }
 }
 
@@ -87,6 +97,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.style.setProperty('--theme-secondary', currentTheme.secondary)
     document.documentElement.style.setProperty('--theme-text', currentTheme.text)
     document.documentElement.style.setProperty('--theme-background', currentTheme.background)
+    document.documentElement.style.setProperty('--theme-accent', currentTheme.accent)
     // Also set the body background
     document.body.style.backgroundColor = currentTheme.primary
   }, [theme, currentTheme])
