@@ -1,6 +1,7 @@
+/* eslint-disable react/no-unknown-property */
 'use client'
 
-import React, { Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import React, { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Text3D, Center } from '@react-three/drei'
 import * as THREE from 'three'
