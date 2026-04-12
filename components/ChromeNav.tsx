@@ -20,7 +20,7 @@ type ChromeNavProps = {
   children: React.ReactNode
 }
 
-const FONT_URL = '/fonts/helvetiker_bold.typeface.json'
+const FONT_URL = '/fonts/monaspace-krypton.typeface.json'
 
 // ---- Environment setup: RoomEnvironment via PMREMGenerator, set as
 // scene.environment so every MeshStandardMaterial in the scene auto-uses
