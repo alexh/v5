@@ -3,7 +3,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote'
-import { serialize } from 'next-mdx-remote/serialize'
 import SmokeyBackground from '../../../components/SmokeyBackground'
 import SnowEffect from '../../../components/SnowEffect'
 import CrtGrid from '../../../components/CrtGrid'
@@ -58,6 +57,9 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
         const blogPost = await response.json()
         setPost(blogPost)
         
+        // Dynamic import keeps the MDX compiler (~100 kB) out of the
+        // page's critical chunk; it streams in after the shell paints.
+        const { serialize } = await import('next-mdx-remote/serialize')
         const mdxSourceResult = await serialize(blogPost.content, {
           mdxOptions: {
             development: process.env.NODE_ENV === 'development',
@@ -264,7 +266,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
     <>
       <BlogJsonLd post={post} />
       <ReadingProgress />
-      <main className="min-h-screen p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative" ref={containerRef}>
+      <main className="min-h-screen overflow-x-hidden p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative" ref={containerRef}>
       <CrtGrid />
       <SnowEffect />
       
@@ -277,7 +279,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
       </div>
 
       <div className="max-w-4xl mx-auto relative z-20">
-        <div className="mb-8">
+        <div className="mb-8 relative z-30">
           <Link href="/blog" className="hover:text-theme-secondary transition-colors font-receipt-narrow text-lg">
             ← Back to Blog
           </Link>

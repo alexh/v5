@@ -400,10 +400,10 @@ export default function JacketViewer() {
   }, [selectedItem])
 
   return (
-    <div className="fixed inset-0 bg-[#000033] p-8">
-      <Link 
+    <div className="fixed inset-0 bg-[#000033] p-4 pt-14 md:p-8">
+      <Link
         href="/"
-        className="absolute top-8 right-8 z-30 px-4 py-2 font-receipt-narrow text-[#00ffff] 
+        className="absolute top-3 right-4 md:top-8 md:right-8 z-30 px-4 py-2 font-receipt-narrow text-[#00ffff]
                  hover:bg-[#4488ff]/20 transition-colors duration-200 flex items-center gap-2"
       >
         {`<`} RETURN_HOME
@@ -418,8 +418,8 @@ export default function JacketViewer() {
         />
       </div>
 
-      <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
-        <div className="order-1 md:order-2 border-2 border-[#4488ff] rounded-lg bg-[#000033]/80 overflow-auto max-h-[50vh] md:max-h-full">
+      <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 relative z-10">
+        <div className="order-1 md:order-2 border-2 border-[#4488ff] rounded-lg bg-[#000033]/80 overflow-auto max-h-[38vh] md:max-h-full">
           <TerminalUI 
             selectedItem={selectedItem} 
             wireframe={wireframe}
@@ -429,7 +429,7 @@ export default function JacketViewer() {
           />
         </div>
 
-        <div className="order-2 md:order-1 relative border-2 border-[#4488ff] rounded-lg h-[50vh] md:h-auto">
+        <div className="order-2 md:order-1 relative border-2 border-[#4488ff] rounded-lg h-[46vh] md:h-auto">
           <div className="absolute top-0 left-0 z-10 p-2 font-receipt-narrow text-[#00ffff] text-sm bg-[#000033]/80 rounded-tl-lg border-r-2 border-b-2 border-[#4488ff]">
             ORBIT_CAM_01 {`>`} RENDERING... {wireframe ? '[WIREFRAME]' : '[SOLID]'}
           </div>

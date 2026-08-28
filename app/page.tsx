@@ -1,97 +1,51 @@
 'use client'
 
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { ThemeSelector } from '../components/ThemeSelector'
 import { InlineThemeSelector } from '../components/InlineThemeSelector'
-import { useTheme } from '../contexts/ThemeContext'
 import SmokeyBackground from '../components/SmokeyBackground'
 import SnowEffect from '../components/SnowEffect'
 import CrtGrid from '../components/CrtGrid'
 import MoonPhase from '../components/MoonPhase'
-import ElevenLabsWidget from '../components/ElevenLabsWidget'
 import ScrambleIn from '../components/ScrambleIn'
 import { ScrambleInHandle } from '../components/ScrambleIn'
 import ParticleText from '../components/ParticleText'
 import ChromeNav from '../components/ChromeNav'
+import { useIsMobile } from '../hooks/use-is-mobile'
 import Link from 'next/link'
 
 export default function Home() {
-  const _currentTheme = useTheme()
   const containerRef = useRef<HTMLDivElement>(null)
   const scrambleRefs = useRef<(ScrambleInHandle | null)[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const isMobile = useIsMobile()
   const paragraphs = [
-    "I am a software engineer living in New York City, USA.",
+    "I am a software engineer living in Brooklyn, New York City, USA.",
     `I'm a Founding Engineer at <a href="https://outersignal.com" class="underline hover:text-[var(--theme-accent)] transition-colors pointer-events-auto">OuterSignal</a>, where we're building customer intelligence that goes beyond what a transaction can tell you — giving brands a real understanding of who their customers are, what makes them valuable, and how to reach them in a way that actually feels personal. Before this, I was a Senior Full Stack Engineer at <a href="https://seek.ai" class="underline hover:text-[var(--theme-accent)] transition-colors pointer-events-auto">Seek AI</a> (acquired by <a href="https://ibm.com" class="underline hover:text-[var(--theme-accent)] transition-colors pointer-events-auto">IBM</a> in June 2024), where I built enterprise-grade agentic data assistants, and spent four years before that at Two Sigma Insurance Quantified.`,
     `Two years ago I founded <a href="https://utility.materials.nyc" class="underline hover:text-[var(--theme-accent)] transition-colors pointer-events-auto cursor-pointer">Utility Materials, Inc.</a>, an NYC-based clothing brand running on Shopify. Operating UMI taught me what it feels like to stare at order data and wish you understood something deeper about the people buying from you — you can see what sold, but the person behind the order stays invisible. That gap always frustrated me, and it's exactly the problem OuterSignal makes visible. I'm building something from the ground up with people I believe in on a problem I've lived firsthand.`,
     `Outside of work, I make full use of my down time — whether skiing, exploring new places, spending time with my dog <a href="https://www.instagram.com/bolognaboynyc" class="underline hover:text-[var(--theme-accent)] transition-colors pointer-events-auto cursor-pointer">Bologna</a>, or developing a <a href="https://digital.materials.nyc/this-god-is-not-final" class="underline hover:text-[var(--theme-accent)] transition-colors pointer-events-auto cursor-pointer">rogue-like platform fighting game</a>.`
   ]
 
   useEffect(() => {
-    // First check if the font is already loaded
-    const checkFont = async () => {
-      try {
-        // Try to load the font if it's not already available
-        const font = new FontFace(
-          'forma-djr-banner',
-          'url(/fonts/forma-djr-banner.woff2)'
-        )
-
-        // Wait for the font to load
-        await font.load()
-        
-        // Add it to the document fonts
-        document.fonts.add(font)
-      } catch (err) {
-        console.log('Font already loaded or error loading:', err)
-      }
-
-      // Wait for all fonts to be ready
-      await document.fonts.ready
-
-      // Add a small delay to ensure everything is rendered properly
-      setTimeout(() => {
-        setIsLoading(false)
-        // Start the scramble effect after loading
-        setTimeout(() => {
-          scrambleRefs.current[0]?.start()
-        }, 100)
-      }, 500)
-    }
-
-    checkFont()
+    // Stagger the paragraph reveals in parallel; each finishes in ~seconds
+    // rather than chaining sequentially behind the previous one.
+    const timers = paragraphs.map((_, i) =>
+      setTimeout(() => scrambleRefs.current[i]?.start(), 200 + i * 180)
+    )
+    return () => timers.forEach(clearTimeout)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (isLoading) {
-    return (
-      <main className="h-screen md:overflow-hidden overflow-auto p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative">
-        <CrtGrid />
-        <div className="absolute inset-0 z-10">
-          <SmokeyBackground targetSelector=".loading-text" zIndex={1} />
-        </div>
-        <div className="h-full flex items-center justify-center relative z-20">
-          <div className="text-4xl loading-text">
-            Loading...
-          </div>
-        </div>
-      </main>
-    )
-  }
-
   return (
-    <main className="min-h-screen overflow-x-hidden overflow-y-auto px-[5%] pt-[1.5%] pb-[40px] md:pb-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative" ref={containerRef}>
+    <main className="min-h-screen overflow-x-hidden overflow-y-auto px-[5%] pt-[1.5%] pb-40 md:pb-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative" ref={containerRef}>
       <CrtGrid />
       <SnowEffect />
-      
-      <div className="hidden md:block">
-        <MoonPhase />
-      </div>
 
-      <div className="hidden md:block">
-        <ThemeSelector initialPosition={{ x: 32, y: 32 }} />
-      </div>
-
-      <ElevenLabsWidget />
+      {isMobile === false && (
+        <>
+          <MoonPhase />
+          <ThemeSelector initialPosition={{ x: 32, y: 32 }} />
+        </>
+      )}
 
       <div className="max-w-3xl mx-auto relative z-20">
         <div className="flex flex-col">
@@ -107,7 +61,7 @@ export default function Home() {
             />
           </div>
           
-          <h2 className="text-xl sm:text-2xl md:text-3xl text-center font-monaspace-krypton text-theme-text z-30 relative mb-4 px-4">
+          <h2 className="text-lg sm:text-2xl md:text-3xl text-center font-monaspace-krypton text-theme-text z-30 relative mb-6 md:mb-4 px-4 whitespace-nowrap">
             Software Engineer | Creative
           </h2>
 
@@ -152,15 +106,10 @@ export default function Home() {
                       scrambleRefs.current[index] = el
                     }}
                     text={text}
-                    scrambleSpeed={1}
+                    durationMs={900}
                     scrambledLetterCount={15}
                     autoStart={false}
                     className="text-theme-text relative"
-                    onComplete={() => {
-                      if (index < paragraphs.length - 1) {
-                        scrambleRefs.current[index + 1]?.start();
-                      }
-                    }}
                   />
                 ))}
               </div>

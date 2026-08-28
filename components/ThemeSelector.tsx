@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { RetroWindow } from './RetroWindow'
 import { useTheme } from '../contexts/ThemeContext'
+import { useIsMobile } from '../hooks/use-is-mobile'
 
 interface ThemeSelectorProps {
   initialPosition?: { x: number; y: number }
@@ -12,10 +13,14 @@ interface ThemeSelectorProps {
 export function ThemeSelector({ initialPosition, forcePosition }: ThemeSelectorProps) {
   const _currentTheme = useTheme()
   const [_position, setPosition] = useState({ x: 0, y: 0 })
+  // Draggable desktop widget; mobile uses InlineThemeSelector instead.
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     setPosition({ x: 20, y: 20 })
   }, [])
+
+  if (isMobile !== false) return null
 
   return (
     <RetroWindow 
