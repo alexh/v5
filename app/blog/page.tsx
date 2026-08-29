@@ -11,6 +11,7 @@ import { InlineThemeSelector } from '../../components/InlineThemeSelector'
 import ScrambleIn from '../../components/ScrambleIn'
 import ParticleText from '../../components/ParticleText'
 import SearchBar from '../../components/SearchBar'
+import { useIsMobile } from '../../hooks/use-is-mobile'
 
 interface BlogPost {
   slug: string
@@ -27,6 +28,7 @@ export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([])
   const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -64,20 +66,19 @@ export default function BlogPage() {
   }
 
   return (
-    <main className="min-h-screen p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative" ref={containerRef}>
+    <main className="min-h-screen overflow-x-hidden p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative" ref={containerRef}>
       <CrtGrid />
       <SnowEffect />
-      
-      <div className="hidden md:block">
-        <MoonPhase />
-      </div>
 
-      <div className="hidden md:block">
-        <ThemeSelector initialPosition={{ x: 32, y: 32 }} />
-      </div>
+      {isMobile === false && (
+        <>
+          <MoonPhase />
+          <ThemeSelector initialPosition={{ x: 32, y: 32 }} />
+        </>
+      )}
 
       <div className="max-w-4xl mx-auto relative z-20">
-        <div className="pt-8 flex flex-col items-center">
+        <div className="pt-8 flex flex-col items-center relative z-30">
           <ParticleText
             text="Blog"
             className="text-6xl font-extrabold text-center tracking-[.02em] text-theme-text font-['forma-djr-banner'] whitespace-nowrap mb-4"
@@ -113,8 +114,15 @@ export default function BlogPage() {
             ) : (
               <div className="grid gap-8">
                 {filteredPosts.map((post) => (
-                  <Link key={post.slug} href={`/blog/${post.slug}`}>
-                    <article className="group relative rounded-lg p-6 bg-theme-primary/50 backdrop-blur-sm cursor-pointer transition-all duration-300 border-2 border-transparent hover:border-theme-secondary hover:shadow-xl hover:shadow-theme-secondary/60">
+                  <article key={post.slug} className="group relative rounded-lg p-6 bg-theme-primary/50 backdrop-blur-sm cursor-pointer transition-all duration-300 border-2 border-transparent hover:border-theme-accent/60">
+                    {/* Stretched link: nesting the tag links inside a card-wide
+                        <Link> produced invalid <a>-in-<a> markup and hydration
+                        errors, so the card link is an overlay instead. */}
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      aria-label={post.title}
+                      className="absolute inset-0 z-[1]"
+                    />
                       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-3">
                         <h2 className="text-2xl font-forma font-bold text-theme-text">
                           {post.title}
@@ -142,25 +150,23 @@ export default function BlogPage() {
                       )}
                       
                       {post.tags && post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-4">
+                        <div className="relative z-[2] flex flex-wrap gap-2 mb-4">
                           {post.tags.map((tag) => (
-                            <Link 
-                              key={tag} 
+                            <Link
+                              key={tag}
                               href={`/blog/tag/${encodeURIComponent(tag)}`}
-                              onClick={(e) => e.stopPropagation()}
-                              className="text-xs px-2 py-1 bg-theme-secondary/20 text-theme-text rounded-full font-receipt-narrow hover:bg-theme-secondary/40 hover:text-theme-text transition-colors"
+                              className="text-sm px-3 py-1.5 bg-theme-secondary/20 text-theme-text rounded-full font-receipt-narrow hover:bg-theme-secondary/40 hover:text-theme-text transition-colors"
                             >
                               #{tag}
                             </Link>
                           ))}
                         </div>
                       )}
-                      
-                      <div className="text-theme-secondary font-receipt-narrow">
+
+                      <div className="text-theme-accent font-receipt-narrow">
                         Read more →
                       </div>
-                    </article>
-                  </Link>
+                  </article>
                 ))}
               </div>
             )}

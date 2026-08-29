@@ -73,8 +73,9 @@ export default function OracleVision() {
           </OracleButton>
         </div>
 
-        <div className="w-full pt-2 px-4 md:px-8">
-          <h1 className="text-3xl font-bold text-center font-mono animate-pulse h-[48px] flex items-center justify-center">
+        {/* pt-16 on mobile clears the fixed [Return] button */}
+        <div className="w-full pt-16 md:pt-2 px-4 md:px-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-center font-mono animate-pulse h-[48px] flex items-center justify-center">
             THE ORACLE SPEAKS
           </h1>
         </div>

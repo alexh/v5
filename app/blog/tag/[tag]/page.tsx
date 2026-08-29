@@ -69,7 +69,7 @@ export default function TagPage({ params }: TagPageProps) {
   }
 
   return (
-    <main className="min-h-screen p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative" ref={containerRef}>
+    <main className="min-h-screen overflow-x-hidden p-[5%] font-receipt-narrow text-theme-text bg-theme-primary relative" ref={containerRef}>
       <CrtGrid />
       <SnowEffect />
       
@@ -82,7 +82,7 @@ export default function TagPage({ params }: TagPageProps) {
       </div>
 
       <div className="max-w-4xl mx-auto relative z-20">
-        <div className="pt-8 flex flex-col items-center">
+        <div className="pt-8 flex flex-col items-center relative z-30">
           <h1 className="text-4xl md:text-5xl font-extrabold text-center tracking-[.02em] text-theme-text font-forma whitespace-nowrap mb-2">
             #{decodedTag}
           </h1>

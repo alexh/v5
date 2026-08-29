@@ -10,6 +10,9 @@ module.exports = {
       fontFamily: {
         'receipt': ['Receipt', 'monospace'],
         'receipt-narrow': ['receipt-narrow', 'sans-serif'],
+        // The typekit kit ships forma-djr-banner (not -display); map the
+        // long-dead font-forma class to the face that actually exists.
+        'forma': ['"forma-djr-banner"', 'sans-serif'],
         'nickel': ['Nickel', 'sans-serif'],
         'monaspace-krypton': ['"Monaspace Krypton"', 'ui-monospace', 'monospace'],
       },
@@ -17,6 +20,8 @@ module.exports = {
         'theme-primary': 'var(--theme-primary)',
         'theme-secondary': 'var(--theme-secondary)',
         'theme-text': 'var(--theme-text)',
+        'theme-accent': 'var(--theme-accent)',
+        'theme-background': 'var(--theme-background)',
       },
       animation: {
         'pulse-glow': 'pulse-glow 4s ease-in-out infinite',

@@ -35,7 +35,7 @@ const _falloff = "exponential"
 const ParticleText: React.FC<ParticleTextProps> = ({
   text,
   className = "",
-  containerRef,
+  containerRef: _containerRef,
   _fromFontVariationSettings,
   _toFontVariationSettings,
   radius = 150,
@@ -58,13 +58,18 @@ const ParticleText: React.FC<ParticleTextProps> = ({
   })
 
   useEffect(() => {
-    // Wait for font to load
-    document.fonts.ready.then(() => {
-      // Add additional delay to ensure font is rendered
-      setTimeout(() => {
-        setFontLoaded(true)
-      }, 500)
-    })
+    // Load the exact face we rasterize into the canvas, falling back to the
+    // full document.fonts.ready barrier if the specific load fails.
+    let cancelled = false
+    document.fonts
+      .load('bold 60px "forma-djr-banner"')
+      .catch(() => document.fonts.ready)
+      .then(() => {
+        if (!cancelled) setFontLoaded(true)
+      })
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   useEffect(() => {
@@ -95,7 +100,7 @@ const ParticleText: React.FC<ParticleTextProps> = ({
     update()
     window.addEventListener('resize', update)
     const ro = new ResizeObserver(update)
-    ro.observe(wrapperRef.current!)
+    if (wrapperRef.current) ro.observe(wrapperRef.current)
     return () => {
       window.removeEventListener('resize', update)
       ro.disconnect()

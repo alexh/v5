@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Floating, { FloatingElement } from './Floating'
 import Float from './Float'
+import { useIsMobile } from '../hooks/use-is-mobile'
 
 // Vision type definition
 type Vision = {
@@ -88,8 +89,11 @@ interface GlowingTextProps {
 }
 
 const GlowingText = ({ children, className = "", delay = 0 }: GlowingTextProps) => {
-  const glowIntensity = useRef(Math.random() * 0.3 + 0.7)
-  const glowDuration = useRef(2 + Math.random())
+  // Deterministic pseudo-random from the delay prop: Math.random() here
+  // renders different styles on server vs client and breaks hydration.
+  const seed = ((delay * 997) % 1 + 1) % 1
+  const glowIntensity = useRef(seed * 0.3 + 0.7)
+  const glowDuration = useRef(2 + ((seed * 7.31) % 1))
 
   return (
     <motion.span
@@ -113,6 +117,11 @@ export default function OracleIntro() {
   const [_animate] = useAnimate()
   const loadedImages = useRef(0)
   const jobsCache = useRef<Record<string, unknown>[]>([])
+  const isMobile = useIsMobile()
+  // Fewer, slower-spawning visions on small screens: 16 overlapping images
+  // smother a phone viewport and the constant re-renders cost real frames.
+  const maxVisionsRef = useRef(MAX_VISIONS)
+  maxVisionsRef.current = isMobile ? 6 : MAX_VISIONS
 
   // Preload jobs
   useEffect(() => {
@@ -159,7 +168,7 @@ export default function OracleIntro() {
       // Keep more recent visions
       const filtered = prev
         .filter(v => now - v.timestamp < VISION_LIFETIME)
-        .slice(-MAX_VISIONS + 1)
+        .slice(-maxVisionsRef.current + 1)
       return [...filtered, newVision]
     })
 
@@ -177,9 +186,13 @@ export default function OracleIntro() {
 
   // Periodically add new visions
   useEffect(() => {
-    const interval = setInterval(addNewVision, VISION_INTERVAL)
+    const interval = setInterval(
+      addNewVision,
+      isMobile ? VISION_INTERVAL * 2 : VISION_INTERVAL
+    )
     return () => clearInterval(interval)
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile])
 
   const handleImageLoad = () => {
     loadedImages.current += 1
@@ -200,17 +213,23 @@ export default function OracleIntro() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.88, delay: 0.5 }}
       >
-        <motion.h1 
-          className="text-6xl font-receipt-narrow text-white mb-4 tracking-[0.25em] uppercase"
+        <motion.h1
+          className="text-4xl sm:text-5xl md:text-6xl font-receipt-narrow text-white mb-4 px-4 tracking-[0.12em] md:tracking-[0.25em] uppercase"
           style={{
             fontFeatureSettings: "'calt' 1", // Enable contextual alternates
             fontVariantLigatures: 'contextual' // Enable contextual ligatures
           }}
         >
-          {"THE ORACLE AWAITS".split('').map((char, i) => (
-            <GlowingText key={i} delay={0.2 + (i * 0.05)}>
-              {char === ' ' ? '\u00A0' : char}
-            </GlowingText>
+          {/* Word-level nowrap so the per-character spans can't break mid-word */}
+          {"THE ORACLE AWAITS".split(' ').map((word, w, words) => (
+            <span key={w} className="whitespace-nowrap">
+              {word.split('').map((char, i) => (
+                <GlowingText key={i} delay={0.2 + ((w * 6 + i) * 0.05)}>
+                  {char}
+                </GlowingText>
+              ))}
+              {w < words.length - 1 ? ' ' : ''}
+            </span>
           ))}
         </motion.h1>
 

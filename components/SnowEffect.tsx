@@ -100,7 +100,8 @@ export default function SnowEffect() {
 
     // Animation loop
     let animationFrameId: number
-    
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       
@@ -171,7 +172,8 @@ export default function SnowEffect() {
         )
       })
 
-      animationFrameId = requestAnimationFrame(animate)
+      // Reduced motion: paint one static starfield frame and stop.
+      if (!reducedMotion) animationFrameId = requestAnimationFrame(animate)
     }
     animate()
 

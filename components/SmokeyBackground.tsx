@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react'
 import { useTheme } from '../contexts/ThemeContext'
+import { useIsMobile } from '../hooks/use-is-mobile'
 
 interface Point {
   x: number
@@ -41,6 +42,10 @@ const SmokeyBackground = ({
   const mouseRef = useRef({ x: 0, y: 0 })
   const frameRef = useRef<number>()
   const textNodesRef = useRef<DOMRect[]>([])
+  // Each particle costs two radial-gradient allocations per frame; phones
+  // can't afford 500 of them, so run a much smaller field there.
+  const isMobile = useIsMobile()
+  const effectiveCount = isMobile ? Math.min(150, particleCount) : particleCount
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -123,7 +128,7 @@ const SmokeyBackground = ({
     }
 
     const initParticles = () => {
-      particlesRef.current = Array.from({ length: particleCount }, createParticle)
+      particlesRef.current = Array.from({ length: effectiveCount }, createParticle)
     }
 
     initParticles()
@@ -206,18 +211,21 @@ const SmokeyBackground = ({
         ctx.fill()
         ctx.globalAlpha = 1
 
-        // Brighter center point
-        const centerGlow = ctx.createRadialGradient(
-          particle.x, particle.y, 0,
-          particle.x, particle.y, innerSize
-        )
-        centerGlow.addColorStop(0, hexToRgba(particleColor, particle.opacity * 2.25 * opacity))
-        centerGlow.addColorStop(1, hexToRgba(particleColor, 0))
+        // Brighter center point: skipped on mobile, halving per-frame
+        // gradient allocations where GPU/CPU headroom is scarce.
+        if (!isMobile) {
+          const centerGlow = ctx.createRadialGradient(
+            particle.x, particle.y, 0,
+            particle.x, particle.y, innerSize
+          )
+          centerGlow.addColorStop(0, hexToRgba(particleColor, particle.opacity * 2.25 * opacity))
+          centerGlow.addColorStop(1, hexToRgba(particleColor, 0))
 
-        ctx.beginPath()
-        ctx.fillStyle = centerGlow
-        ctx.arc(particle.x, particle.y, innerSize, 0, Math.PI * 2)
-        ctx.fill()
+          ctx.beginPath()
+          ctx.fillStyle = centerGlow
+          ctx.arc(particle.x, particle.y, innerSize, 0, Math.PI * 2)
+          ctx.fill()
+        }
 
         // Smoother regeneration
         particle.life--
@@ -229,9 +237,12 @@ const SmokeyBackground = ({
         }
       })
 
-      frameRef.current = requestAnimationFrame(animate)
+      if (!reducedMotion) frameRef.current = requestAnimationFrame(animate)
     }
 
+    // Reduced motion: a single static smoke frame still gives the page its
+    // atmosphere without a perpetual rAF loop.
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     animate()
 
     return () => {
@@ -241,7 +252,7 @@ const SmokeyBackground = ({
         cancelAnimationFrame(frameRef.current)
       }
     }
-  }, [currentTheme, opacity, targetSelector, particleCount, followText, color])
+  }, [currentTheme, opacity, targetSelector, effectiveCount, followText, color, isMobile])
 
   return (
     <canvas

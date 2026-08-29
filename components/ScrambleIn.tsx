@@ -9,8 +9,17 @@ import React, {
 import { prepare, layout } from "@chenglou/pretext"
 
 interface ScrambleInProps {
-  text: string
+  /** HTML string to reveal. Prefer `children` for anything with markup:
+   * browsers re-serialize HTML (`<br />` -> `<br>`), so a non-canonical
+   * string here fails React's hydration compare. */
+  text?: string
+  children?: React.ReactNode
+  /** Wrapper element. Use "div" when children contain block content. */
+  as?: "p" | "div"
   scrambleSpeed?: number
+  /** Total reveal duration. When set, overrides scrambleSpeed with a
+   * time-based reveal so long paragraphs finish just as fast as short ones. */
+  durationMs?: number
   scrambledLetterCount?: number
   characters?: string
   className?: string
@@ -30,18 +39,14 @@ interface CachedTextNode {
   originalText: string
 }
 
-const stripHtml = (html: string): string => {
-  if (typeof document === "undefined") return ""
-  const div = document.createElement("div")
-  div.innerHTML = html
-  return div.textContent || ""
-}
-
 const ScrambleIn = forwardRef<ScrambleInHandle, ScrambleInProps>(
   (
     {
       text,
+      children,
+      as: Tag = "p",
       scrambleSpeed = 50,
+      durationMs,
       scrambledLetterCount = 2,
       characters = "abcdefghijklmnopqrstuvwxyz!@#$%^&*()_+",
       className = "",
@@ -51,10 +56,11 @@ const ScrambleIn = forwardRef<ScrambleInHandle, ScrambleInProps>(
     },
     ref
   ) => {
-    const paragraphRef = useRef<HTMLParagraphElement | null>(null)
+    const paragraphRef = useRef<HTMLElement | null>(null)
     const cachedNodesRef = useRef<CachedTextNode[]>([])
     const totalLengthRef = useRef(0)
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+    const rafRef = useRef(0)
     const visibleCountRef = useRef(0)
     const completedRef = useRef(false)
 
@@ -68,6 +74,10 @@ const ScrambleIn = forwardRef<ScrambleInHandle, ScrambleInProps>(
       if (intervalRef.current) {
         clearInterval(intervalRef.current)
         intervalRef.current = null
+      }
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = 0
       }
     }, [])
 
@@ -95,30 +105,57 @@ const ScrambleIn = forwardRef<ScrambleInHandle, ScrambleInProps>(
       }
     }, [characters, scrambledLetterCount])
 
+    const finishAnimation = useCallback(() => {
+      for (const cn of cachedNodesRef.current) {
+        cn.node.textContent = cn.originalText
+      }
+      stopInterval()
+      if (!completedRef.current) {
+        completedRef.current = true
+        onCompleteRef.current?.()
+      }
+    }, [stopInterval])
+
     const startAnimation = useCallback(() => {
       if (cachedNodesRef.current.length === 0) return
       stopInterval()
       visibleCountRef.current = 0
       completedRef.current = false
       onStartRef.current?.()
+
+      // Reduced motion: skip the reveal entirely
+      if (
+        typeof window !== "undefined" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        finishAnimation()
+        return
+      }
+
       renderProgress()
 
-      intervalRef.current = setInterval(() => {
-        if (visibleCountRef.current < totalLengthRef.current) {
-          visibleCountRef.current++
+      // Time-based reveal: total time is constant regardless of text length,
+      // so long paragraphs never leave the page stuck in scrambled gibberish.
+      // Falls back to per-character pacing when durationMs isn't provided.
+      const total = totalLengthRef.current
+      const totalDuration = durationMs ?? total * scrambleSpeed
+      const startTime = performance.now()
+
+      const tick = (now: number) => {
+        const progress = Math.min(1, (now - startTime) / totalDuration)
+        const target = Math.floor(progress * total)
+        if (target !== visibleCountRef.current) {
+          visibleCountRef.current = target
           renderProgress()
-        } else {
-          for (const cn of cachedNodesRef.current) {
-            cn.node.textContent = cn.originalText
-          }
-          stopInterval()
-          if (!completedRef.current) {
-            completedRef.current = true
-            onCompleteRef.current?.()
-          }
         }
-      }, scrambleSpeed)
-    }, [scrambleSpeed, renderProgress, stopInterval])
+        if (progress < 1) {
+          rafRef.current = requestAnimationFrame(tick)
+        } else {
+          finishAnimation()
+        }
+      }
+      rafRef.current = requestAnimationFrame(tick)
+    }, [scrambleSpeed, durationMs, renderProgress, stopInterval, finishAnimation])
 
     const reset = useCallback(() => {
       stopInterval()
@@ -140,22 +177,8 @@ const ScrambleIn = forwardRef<ScrambleInHandle, ScrambleInProps>(
       const el = paragraphRef.current
       if (!el) return
 
-      // Parse original texts from the HTML prop (not live DOM, which may be
-      // blank from a prior Strict Mode double-invocation)
-      const parser = document.createElement("div")
-      parser.innerHTML = text
-      const originalTexts: string[] = []
-      const parserWalker = document.createTreeWalker(
-        parser,
-        NodeFilter.SHOW_TEXT,
-        null
-      )
-      let pNode: Node | null
-      while ((pNode = parserWalker.nextNode()) !== null) {
-        originalTexts.push(pNode.textContent || "")
-      }
-
-      // Walk live DOM text nodes and pair with parsed originals
+      // Originals come from the live DOM (restored by this effect's cleanup,
+      // so a Strict Mode double-invocation never sees blanked nodes).
       const cached: CachedTextNode[] = []
       let totalLength = 0
       const walker = document.createTreeWalker(
@@ -164,20 +187,19 @@ const ScrambleIn = forwardRef<ScrambleInHandle, ScrambleInProps>(
         null
       )
       let node: Node | null
-      let i = 0
       while ((node = walker.nextNode()) !== null) {
         const textNode = node as Text
-        const original = i < originalTexts.length ? originalTexts[i] : ""
+        const original = textNode.textContent || ""
         cached.push({
           node: textNode,
           startOffset: totalLength,
           originalText: original,
         })
         totalLength += original.length
-        i++
       }
       cachedNodesRef.current = cached
       totalLengthRef.current = totalLength
+      const plainText = cached.map((cn) => cn.originalText).join("")
 
       // Measure final height with pretext and apply directly to DOM
       try {
@@ -189,7 +211,6 @@ const ScrambleIn = forwardRef<ScrambleInHandle, ScrambleInProps>(
             ? fontSizePx * 1.5
             : parseFloat(cs.lineHeight) || fontSizePx * 1.5
         const widthPx = el.clientWidth
-        const plainText = stripHtml(text)
         if (widthPx > 0 && plainText.length > 0) {
           const prepared = prepare(plainText, font)
           const result = layout(prepared, widthPx, lineHeight)
@@ -203,6 +224,14 @@ const ScrambleIn = forwardRef<ScrambleInHandle, ScrambleInProps>(
       for (const cn of cached) {
         cn.node.textContent = ""
       }
+      return () => {
+        for (const cn of cached) {
+          cn.node.textContent = cn.originalText
+        }
+      }
+      // `children` is intentionally excluded: a parent re-render mid-reveal
+      // would re-cache the half-scrambled text as the original.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [text])
 
     // Auto-start after layout effect has cached nodes
@@ -217,11 +246,18 @@ const ScrambleIn = forwardRef<ScrambleInHandle, ScrambleInProps>(
       return () => stopInterval()
     }, [stopInterval])
 
+    if (children !== undefined) {
+      return (
+        <Tag ref={paragraphRef as React.RefObject<HTMLParagraphElement>} className={className}>
+          {children}
+        </Tag>
+      )
+    }
     return (
-      <p
-        ref={paragraphRef}
+      <Tag
+        ref={paragraphRef as React.RefObject<HTMLParagraphElement>}
         className={className}
-        dangerouslySetInnerHTML={{ __html: text }}
+        dangerouslySetInnerHTML={{ __html: text ?? "" }}
       />
     )
   }

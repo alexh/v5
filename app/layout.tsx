@@ -1,9 +1,7 @@
-import { Inter } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 import { ThemeProvider } from '../contexts/ThemeContext'
 import ElevenLabsWidget from '../components/ElevenLabsWidget'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   metadataBase: new URL('https://alexhaynes.org'),
@@ -74,21 +72,25 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="preconnect" href="https://use.typekit.net" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://p.typekit.net" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link rel="stylesheet" href="https://use.typekit.net/qzy8qpi.css" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/monaspace-krypton/index.css" />
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-8BDD7C0K90"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-8BDD7C0K90');
-            `,
-          }}
-        />
       </head>
-      <body className={inter.className}>
+      <body>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-8BDD7C0K90"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-8BDD7C0K90');
+          `}
+        </Script>
         <ThemeProvider>
           <ElevenLabsWidget />
           {children}

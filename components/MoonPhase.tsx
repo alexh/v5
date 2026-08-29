@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
+import { useIsMobile } from '../hooks/use-is-mobile'
 
 interface Particle {
   x: number
@@ -12,7 +13,15 @@ interface Particle {
   color: string
 }
 
+// Desktop-only ambient widget: gate BEFORE the inner component mounts so the
+// canvas, frame decoding, and rAF loop never start on mobile.
 export default function MoonPhase() {
+  const isMobile = useIsMobile()
+  if (isMobile !== false) return null
+  return <MoonPhaseInner />
+}
+
+function MoonPhaseInner() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<Particle[]>([])
   const [_currentFrame, setCurrentFrame] = useState(0)
